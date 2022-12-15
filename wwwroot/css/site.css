@@ -35,3 +35,180 @@ body {
         height: 96px;
         border-radius: 50%;
     }
+
+
+
+
+
+
+.upload-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .upload-body > .wrapper {
+        width: 100%;
+        background: linear-gradient( 333deg, #4caf5042, #0096882b);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+        .upload-body > .wrapper > .form-upload-excel {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 15px;
+            border: 1px dashed #404040;
+            margin: 30px;
+            cursor: pointer;
+            color: #404040;
+            opacity: 0.5;
+            transition: all 0.5s ease;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+        }
+
+            .upload-body > .wrapper > .form-upload-excel:hover {
+                opacity: 1;
+            }
+                .upload-body > .wrapper > .form-upload-excel:hover > i {
+                    transform: translateY(-10px);
+                    transition: all 0.5s ease;
+                    -webkit-transition: all 0.5s ease;
+                    -moz-transition: all 0.5s ease;
+                    -ms-transition: all 0.5s ease;
+                    -o-transition: all 0.5s ease;
+                }
+
+            .upload-body > .wrapper > .form-upload-excel > input {
+                display: none;
+            }
+
+            .upload-body > .wrapper > .form-upload-excel > i {
+                font-size: 90px;
+                transform: translateY(0px);
+                transition: all 0.5s ease;
+                -webkit-transition: all 0.5s ease;
+                -moz-transition: all 0.5s ease;
+                -ms-transition: all 0.5s ease;
+                -o-transition: all 0.5s ease;
+            }
+
+
+            .upload-body > .wrapper > .form-upload-excel > p {
+                font-size: 16px;
+                font-weight: bolder;
+            }
+
+        .upload-body > .wrapper > section > ul > li {
+            background: linear-gradient( 333deg, #242424, #404040);
+            list-style: none;
+            padding: 15px 8px;
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #fff;
+        }
+
+            .upload-body > .wrapper > section > ul > li > i {
+                font-size: 25px;
+                color: #006effc4;
+                transition: all 0.5s ease;
+                -webkit-transition: all 0.5s ease;
+                -moz-transition: all 0.5s ease;
+                -ms-transition: all 0.5s ease;
+                -o-transition: all 0.5s ease;
+            }
+
+            .upload-body > .wrapper > section > ul > li > .icofont-eye {
+                cursor: pointer;
+                opacity: 0.60;
+                transition: all 0.5s ease;
+                -webkit-transition: all 0.5s ease;
+                -moz-transition: all 0.5s ease;
+                -ms-transition: all 0.5s ease;
+                -o-transition: all 0.5s ease;
+            }
+
+                .upload-body > .wrapper > section > ul > li > .icofont-eye:hover {
+                    opacity: 1;
+                }
+
+        .upload-body > .wrapper > section > ul {
+            margin: 0px !important;
+        }
+
+            .upload-body > .wrapper > section > ul > li > .content {
+                position: relative;
+                width: 100%;
+                margin-left: 15px;
+            }
+
+        .upload-body > .wrapper > .progress-area > ul > li > .content > .details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upload-body > .wrapper > .progress-area > ul > li > .content > .progress-bar-excel {
+            height: 8px;
+            width: 100%;
+            background: #fff;
+            border-radius: 30px;
+        }
+
+            .upload-body > .wrapper > .progress-area > ul > li > .content > .progress-bar-excel > .progress-excel {
+                height: 100%;
+                width: 0%;
+                background: linear-gradient( 333deg, #005F88, #006effc4);
+                border-radius: inherit;
+            }
+
+
+        .upload-body > .wrapper > .progress-area > ul > li > .content > .details > .percent {
+            font-weight: bolder;
+            font-size: 18px;
+        }
+
+        .upload-body > .wrapper > .uploaded-area > ul > li > .content > .details {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .upload-body > .wrapper > .uploaded-area > ul > li > .content > .details > .size {
+                font-size: 11px;
+                line-height: 8px;
+            }
+
+        .upload-body > .wrapper > .uploaded-area > ul > li > .icofont-ui-check:hover {
+            cursor: pointer;
+            color: #FF2800;
+        }
+
+            .upload-body > .wrapper > .uploaded-area > ul > li > .icofont-ui-check:hover:before {
+                content: "\ed2b";
+            }
+
+        .upload-body > .wrapper > .uploaded-area {
+            max-height: 180px;
+            overflow-y: scroll;
+        }
+
+            .upload-body > .wrapper > .uploaded-area::-webkit-scrollbar {
+                width: 0px;
+            }
+
+.text-warning-table-convert {
+    margin-left: 25px;
+    color: #880000;
+    font-weight: 500;
+}

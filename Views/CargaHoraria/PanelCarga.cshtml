@@ -1,0 +1,154 @@
+﻿@{
+    Layout = "_LayoutPanel";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Panel principal</span>
+        </a>
+
+        <div class="text-center">
+
+            <h3><strong>Cargar archivo ponchador</strong></h3>
+        </div>
+
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <div class="col-md-12 col-sm-12 col-xs-12 upload-body">
+            <div class="wrapper">
+                <div id="FormUploadExcel" class="form-upload-excel">
+                    <input type="file" id="ExcelFile" hidden="hidden" name="ExcelFilePlantillaIn" />
+                    <i class="bi bi-cloud-upload-fill"></i>
+                </div>
+                <section id="ProgressArea" class="progress-area"></section>
+                <section id="UploadArea" class="uploaded-area"></section>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    const form = document.getElementById('FormUploadExcel');
+    const excelfileInput = document.getElementById('ExcelFile');
+    const progresArea = document.getElementById('ProgressArea');
+    const uploadArea = document.getElementById('UploadArea');
+
+    const FILETYPEBASE = {
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': true,
+        'application/vnd.ms-excel': true
+    }
+
+
+    form.addEventListener('click', (e) => {
+        excelfileInput.click();
+    });
+
+    excelfileInput.onchange = ({ target }) => {
+        let file = target.files[0];
+        if (ValidateFile(file)) {
+            if (file) {
+                UploadFile(file);
+            }
+        }
+    }
+
+
+    function ValidateFile(file) {
+
+        console.log(file.type);
+
+        let IsValidFile = FILETYPEBASE[file.type] || false;
+        if (IsValidFile == false) {
+            swal({
+                title: '.DAT | .xlsx | .xls',
+                text: "Solo archivos permitidos",
+                icon: "error"
+            });
+            return false;
+        }
+
+
+
+        return true;
+
+    }
+
+    function UploadFile(file) {
+        let fileName = file.name;
+        let loaded = 0;
+        let total = file.size;
+        let bubble = total / 10;
+        if (fileName.length >= 12) {
+            let splitName = fileName.split('.');
+            fileName = `${splitName[0].substring(0, 12)}... .${splitName[1]}`;
+        }
+
+        let counts = setInterval(Update, 100);
+
+        function Update() {
+            loaded += bubble;
+            let fileLoadedPercent = Math.floor((loaded / total) * 100);
+            let fileTotal = Math.floor(total / 1000);
+            let fileSize;
+            (fileTotal < 1024) ? fileSize = fileTotal + ' KB' : fileSize = (loaded / (1024 * 1024)).toFixed(2) + ' MB';
+            if (fileLoadedPercent >= 100) fileLoadedPercent = 100;
+            uploadArea.innerHTML = '';
+            let progressHTML = `
+                                <ul>
+                                <li>
+                                    <i class="icofont icofont-file-excel"></i>
+                                    <div class="content">
+                                        <div class="details">
+                                            <span class="name">${fileName} ● Load</span>
+                                            <span class="percent">${fileLoadedPercent}%</span>
+                                        </div>
+                                        <div class="progress-bar-excel">
+                                            <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                </ul>
+                                `;
+
+            progresArea.innerHTML = progressHTML;
+
+            if (loaded >= total) {
+                clearInterval(counts);
+                progresArea.innerHTML = '';
+                let doneHTML = `
+                                <ul>
+                                    <li>
+                                        <i class="icofont icofont-file-excel"></i>
+                                        <div class="content">
+                                            <div class="details">
+                                                <span class="name">${file.name}</span>
+                                                <span class="size">${fileSize}</span>
+                                            </div>
+                                        </div>
+                                            <i onclick="RemoveFile(this)" class="bi bi-check-circle-fill"></i>
+                                    </li>
+                                </ul>
+                                `;
+                uploadArea.innerHTML = doneHTML;
+            }
+
+        }
+    }
+
+    function RemoveFile(Tag) {
+        $(Tag.parentElement.parentElement).fadeOut(300, function () {
+            Tag.parentElement.parentElement.remove();
+            excelfileInput.value = null;
+        });
+
+    }
+
+</script>
