@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "_LayoutPanel";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="text-center">
+            <img src="~/media/img/clock128x.png" alt="Clock">
+            <h1 class="display-4">TimeKeeper Calculator</h1>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="d-grid gap-2 col-4 mx-auto">
+            <a href="@Url.Action("Index","Empleado")" class="btn btn-outline-success btn-lg">
+                <i class="bi bi-people-fill"></i>
+                <span>Registro de empleados</span>
+            </a>
+            <a class="btn btn-outline-success btn-lg">
+                <i class="bi bi-clock-fill"></i>
+                <span>Carga horaria</span>
+            </a>
+            <a class="btn btn-outline-success btn-lg">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Reporte de horas</span>
+            </a>
+            <a href="@Url.Action("Index","Usuario")" class="btn btn-outline-success btn-lg">
+                <i class="bi bi-person-fill"></i>
+                <span>Usuarios</span>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+

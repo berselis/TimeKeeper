@@ -1,0 +1,37 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+
+
+.pg-loaded {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.td-face-id {
+    display: flex;
+    align-items: center;
+}
+
+    .td-face-id > img {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+    }

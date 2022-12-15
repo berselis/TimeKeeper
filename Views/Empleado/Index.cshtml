@@ -1,0 +1,181 @@
+﻿@model IEnumerable<TimeKeeper.Models.Empleados>
+@{
+    Layout = "_LayoutPanel";
+}
+
+<div class="modal fade" id="modalAddEmploy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddUser" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" asp-controller="Empleado" asp-action="Registrar" method="post" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Agregar empleado</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body p-5 shadow-5">
+
+                    <div class="mb-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">ID Ponchador</span>
+                            <input type="number" class="form-control" name="IdEmpleado" required >
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">Nombre</span>
+                            <input type="text" class="form-control" name="Nombre" required >
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">Departamento</span>
+                            <input type="text" class="form-control" name="Departamento" required>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save-fill"></i>
+                    <span>Guardar</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <a asp-controller="Home" asp-action="Panel" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Panel principal</span>
+        </a>
+
+        <div class="text-center">
+
+            <h5>Empleados</h5>
+        </div>
+
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <button id="btnAddEmploy" class="float-end btn btn-outline-success mb-4" type="button" data-bs-toggle="modal" data-bs-target="#modalAddEmploy">
+            <i class="bi bi-person-fill-add"></i>
+            <span>Agregar</span>
+        </button>
+
+
+        <table id="EmployTable" class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Ponchador</th>
+                    <th>Face</th>
+                    <th>Empleado</th>
+                    <th>Puesto</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string extension = item.IdEmpleado.ToString() + ".jpg";
+                    if (item.HasImg == false) extension = "faceDefault.png";
+
+
+                    <tr>
+                        <td>
+                            <h2 style="color: #198754;"><strong>@item.IdEmpleado</strong></h2>
+                        </td>
+                        <td class="td-face-id">
+                            <img src="~/media/biophoto/face/@extension" />
+                        </td>
+                        <td>
+                            <h3><strong>@item.Nombre</strong></h3>
+                        </td>
+                        <td><strong>@item.Departamento</strong></td>
+                        <td>
+                            <a class="btn btn-outline-info" asp-controller="Empleado" asp-action="Empleado" asp-route-Id="@item.IdEmpleado">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+
+                            <a class="btn btn-outline-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+
+                            <a class="btn btn-outline-success">
+                                <i class="bi bi-clock-fill"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    const employtable = document.getElementById('EmployTable');
+    const rows = employtable.lastElementChild.childElementCount;
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (rows > 1) {
+            let table = new DataTable(employtable, {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json'
+                }
+            });
+        }
+
+        MostrarMensaje();
+
+    });
+
+
+    function MostrarMensaje() {
+        const msj = '@ViewBag.Msj';
+
+        console.log(msj);
+        switch (msj) {
+            case "edited":
+                ShowDialog('Editado!!');
+                break;
+            case "added":
+                ShowDialog('Agregado!!');
+                break;
+            default:
+                return;
+        }
+
+
+        function ShowDialog(text) {
+            swal({
+                title: text,
+                text: "Información del empleado",
+                icon: "success"
+            });
+        }
+    }
+
+
+</script>
+

@@ -1,0 +1,56 @@
+﻿@model TimeKeeper.Models.Empleados
+@{
+    Layout = "_LayoutPanel";
+}
+
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <a asp-controller="Empleado" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Listado empleados</span>
+        </a>
+
+        <div class="text-center">
+
+            <h3><strong>@Model.Nombre</strong></h3>
+        </div>
+
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <form class="d-grid gap-2 col-6 mx-auto" asp-controller="Empleado" asp-action="EditarEmpleado" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text" >ID Ponchador</span>
+                    <input type="text" class="form-control" name="IdEmpleado" required value="@Model.IdEmpleado" readonly>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text">Nombre</span>
+                    <input type="text" class="form-control" name="Nombre" required value="@Model.Nombre">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text">Departamento</span>
+                    <input type="text" class="form-control" name="Departamento" required value="@Model.Departamento">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-outline-info btn-lg me-md-2" type="submit">
+                        <span>Guardar</span>
+                        <i class="bi bi-save2-fill"></i>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

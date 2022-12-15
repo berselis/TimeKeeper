@@ -1,0 +1,161 @@
+﻿@model ICollection<TimeKeeper.Models.Usuario>
+
+@{
+    Layout = "_LayoutPanel";
+}
+
+
+<div class="modal fade" id="modalAddUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddUser" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" asp-controller="Usuario" asp-action="Registrar" method="post" enctype="multipart/form-data">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Agregar usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body p-5 shadow-5">
+
+                    
+                    <div class="form-check form-switch mb-4">
+                        <label class="form-check-label">Administrator</label>
+                        <input class="form-check-input" type="checkbox" name="RoleName" value="Admin" />
+                    </div>
+
+
+                    <div class="form-outline mb-4">
+                        <input type="text" id="usuario" name="UserName" class="form-control" required />
+                        <label class="form-label" for="usuario">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Nombre de usuario</span>
+                        </label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <input type="password" id="password" name="Password" class="form-control" required />
+                        <label class="form-label" for="password">
+                            <i class="bi bi-key-fill"></i>
+                            <span>Password</span>
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save-fill"></i>
+                    <span>Guardar</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <a asp-controller="Home" asp-action="Panel" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Panel principal</span>
+        </a>
+
+        <div class="text-center">
+
+            <h5>Usuarios</h5>
+        </div>
+
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <button id="btnAddUser" class="float-end btn btn-outline-success mb-4" type="button" data-bs-toggle="modal" data-bs-target="#modalAddUser">
+            <i class="bi bi-person-fill-add"></i>
+            <span>Agregar</span>
+        </button>
+
+        <table id="EmployTable" class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.UserName</td>
+                        <td>@item.RoleName</td>
+                        <td>-</td>
+                        <td>
+                            <a class="btn btn-outline-info" asp-controller="Usuario" asp-action="Empleado" asp-route-Id="@item.Id">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+
+                            <a class="btn btn-outline-danger">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+
+
+
+</div>
+
+<script type="text/javascript">
+    const employtable = document.getElementById('EmployTable');
+    const rows = employtable.lastElementChild.childElementCount;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (rows > 1) {
+            let table = new DataTable(employtable, {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json'
+                }
+            });
+        }
+
+        MostrarMensaje();
+
+    });
+
+    function MostrarMensaje() {
+        const msj = '@ViewBag.Msj';
+
+        console.log(msj);
+        switch (msj) {
+            case "edited":
+                ShowDialog('<h3><strong>Editado!!</strong></h3>');
+                break;
+            case "creado":
+                ShowDialog('<h3><strong>Agregado!!</strong></h3>');
+                break;
+            default:
+                return;
+        }
+
+
+        function ShowDialog(text) {
+            swal({
+                title: text,
+                text: "Información del empleado",
+                icon: "success"
+            });
+        }
+    }
+
+
+
+
+</script>
