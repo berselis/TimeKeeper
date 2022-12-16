@@ -1,6 +1,5 @@
 E:\GitHUB\TimeKeeper\bin\Release\net6.0\appsettings.Development.json
 E:\GitHUB\TimeKeeper\bin\Release\net6.0\appsettings.json
-E:\GitHUB\TimeKeeper\bin\Release\net6.0\efpt.config.json
 E:\GitHUB\TimeKeeper\bin\Release\net6.0\TimeKeeper.staticwebassets.runtime.json
 E:\GitHUB\TimeKeeper\bin\Release\net6.0\TimeKeeper.exe
 E:\GitHUB\TimeKeeper\bin\Release\net6.0\TimeKeeper.deps.json
@@ -66,3 +65,10 @@ E:\GitHUB\TimeKeeper\obj\Release\net6.0\refint\TimeKeeper.dll
 E:\GitHUB\TimeKeeper\obj\Release\net6.0\TimeKeeper.pdb
 E:\GitHUB\TimeKeeper\obj\Release\net6.0\TimeKeeper.genruntimeconfig.cache
 E:\GitHUB\TimeKeeper\obj\Release\net6.0\ref\TimeKeeper.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\ClosedXML.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\DocumentFormat.OpenXml.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\ExcelNumberFormat.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\Irony.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\SixLabors.Fonts.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\System.IO.Packaging.dll
+E:\GitHUB\TimeKeeper\bin\Release\net6.0\XLParser.dll

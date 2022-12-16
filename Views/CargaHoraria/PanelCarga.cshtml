@@ -64,28 +64,21 @@
                                 <th>Fecha actualizado</th>
                                 <th>Fecha aplicado</th>
                                 <th>Usuario</th>
-                                <th>Comentario</th>
+                                <th>Registros</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                             <tr>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
+                            @foreach (var item in Model.Cargas)
+                            {
+                                <tr>
+                                    <td>@item.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt")</td>
+                                    <td>@item.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt")</td>
+                                    <td>@item.NombreUsuario</td>
+                                    <td>@item.Comentario</td>
+                                </tr>
+                            }
+
+
                         </tbody>
                     </table>
                 </div>
@@ -121,21 +114,30 @@
     function MostrarMensaje() {
         const msj = '@Model.Msj';
 
-   
+
         switch (msj) {
-            case "load":
-                ShowDialog('Cargado!!');
+            case "error":
+                ShowDialog('Error file', 'error');
                 break;
+            case "success":
+                ShowDialog('Cargado', 'success');
+                break;
+            case "invalidFormat":
+                ShowDialog('Formato de archivo inválido', 'warning');
+            case "notTimeRegister":
+                ShowDialog('No hay registros', 'warning');
+            case "duplicated":
+                ShowDialog('Registros duplicado', 'warning');
             default:
                 return;
         }
 
 
-        function ShowDialog(text) {
+        function ShowDialog(text, typeIcon) {
             swal({
                 title: text,
-                text: "Información del empleado",
-                icon: "success"
+                text: "Archivo ponchador",
+                icon: typeIcon
             });
         }
     }
@@ -198,21 +200,21 @@
             if (fileLoadedPercent >= 100) fileLoadedPercent = 100;
             uploadArea.innerHTML = '';
             let progressHTML = `
-                                    <ul>
-                                    <li>
-                                        <i class="icofont icofont-file-excel"></i>
-                                        <div class="content">
-                                            <div class="details">
-                                                <span class="name">${fileName} ● Load</span>
-                                                <span class="percent">${fileLoadedPercent}%</span>
-                                            </div>
-                                            <div class="progress-bar-excel">
-                                                <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    </ul>
-                                    `;
+                                            <ul>
+                                            <li>
+                                                <i class="icofont icofont-file-excel"></i>
+                                                <div class="content">
+                                                    <div class="details">
+                                                        <span class="name">${fileName} ● Load</span>
+                                                        <span class="percent">${fileLoadedPercent}%</span>
+                                                    </div>
+                                                    <div class="progress-bar-excel">
+                                                        <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            </ul>
+                                            `;
 
             progresArea.innerHTML = progressHTML;
 
@@ -221,23 +223,23 @@
                 $(progresArea).fadeOut(150, function () {
                     progresArea.innerHTML = '';
                     let doneHTML = `
-                                        <ul>
-                                            <li>
-                                                <i class="icofont icofont-file-excel"></i>
-                                                <div class="content">
-                                                    <div class="details">
-                                                        <span class="name">${file.name}</span>
-                                                        <span class="size">${fileSize}</span>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="btn btn-outline-success btn-sm">
-                                                    <i class="bi bi-file-arrow-up-fill"></i>
-                                                    <strong>Cargar</strong>
-                                                </button>
-                                                <i onclick="RemoveFile(this)" class="bi bi-x-circle-fill remove-file"></i>
-                                            </li>
-                                        </ul>
-                                        `;
+                                                <ul>
+                                                    <li>
+                                                        <i class="icofont icofont-file-excel"></i>
+                                                        <div class="content">
+                                                            <div class="details">
+                                                                <span class="name">${file.name}</span>
+                                                                <span class="size">${fileSize}</span>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                                            <i class="bi bi-file-arrow-up-fill"></i>
+                                                            <strong>Cargar</strong>
+                                                        </button>
+                                                        <i onclick="RemoveFile(this)" class="bi bi-x-circle-fill remove-file"></i>
+                                                    </li>
+                                                </ul>
+                                                `;
                     uploadArea.innerHTML = doneHTML;
                 })
 

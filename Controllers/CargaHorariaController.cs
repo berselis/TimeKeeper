@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 using TimeKeeper.DTOs;
@@ -22,7 +23,7 @@ namespace TimeKeeper.Controllers
             _context = context;
         }
 
-        public IActionResult PanelCarga(string msj)
+        public async Task<IActionResult> PanelCarga(string msj)
         {
 
             PanelCargaDTO panelCarga = new()
@@ -30,19 +31,22 @@ namespace TimeKeeper.Controllers
                 Msj = msj,
                 Usuario = "N/A",
                 FechaAplicado = "N/A",
-                FechaActualizado = "N/A"
+                FechaActualizado = "N/A",
+                Cargas = new List<RegistroCarga>()
             };
 
-            if(_context.RegistrosCargas.Any())
+            if(await _context.RegistrosCargas.AnyAsync())
             {
-               
+                List<RegistroCarga> registroCargas = await _context.RegistrosCargas.ToListAsync();
+                RegistroCarga last = registroCargas.Last();
 
+                panelCarga.Usuario = last.NombreUsuario;
+                panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
+                panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
+
+                panelCarga.Cargas = registroCargas;
 
             }
-           
-            
-
-
            
             return View(panelCarga);
         }
@@ -66,30 +70,45 @@ namespace TimeKeeper.Controllers
 
                 StreamReader reader = new(fileRoot);
                 string content = reader.ReadToEnd();
+                reader.Close();
 
 
                 List<Tiempo> timeRegisters = DatFileProces.GetDtoTiempos(content);
                 if (timeRegisters.Count <= 0) return RedirectToAction(nameof(PanelCarga), new { msj = "notTimeRegister" });
 
 
-                int totalRegistro = timeRegisters.Count;
+                int totalReg = timeRegisters.Count;
 
                 if (_context.RegistrosCargas.Any())
                 {
-
+                    List<RegistroCarga> registroCargas = await _context.RegistrosCargas.ToListAsync();
+                    RegistroCarga last = registroCargas.Last();
+                    timeRegisters = timeRegisters.Where(whe => whe.DateReg > last.FechaRegistro).ToList();
                 }
 
+                int filterReg = timeRegisters.Count;
+
+                if(filterReg <= 0) return RedirectToAction(nameof(PanelCarga), new { msj = "duplicated" });
+
+                _context.Tiempos.AddRange(timeRegisters);
 
 
+                RegistroCarga reg = new()
+                {
+                    NombreUsuario = User.Identity.Name,
+                    FechaRegistro = timeRegisters.Last().DateReg,
+                    FechaAplicado = DateTime.Now,
+                    Comentario = $"{totalReg} de {filterReg} Reg"
+                };
 
-
-
+                _context.RegistrosCargas.Add(reg);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(PanelCarga), new { msj = "success" });
 
             }
             catch (Exception ex)
             {
-                return RedirectToAction(nameof(PanelCarga), new { msj = ex.Message });
+                return RedirectToAction(nameof(PanelCarga), new { msj = "error" });
             }
 
 

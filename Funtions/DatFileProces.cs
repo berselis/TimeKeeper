@@ -18,7 +18,7 @@ namespace TimeKeeper.Funtions
                 Tiempo tiempo = new()
                 {
                     IdEmpleado = Convert.ToInt32(parts[0]),
-                    DateReg = Convert.ToDateTime(datetime[0]),
+                    DateReg = Convert.ToDateTime($"{datetime[0]} {datetime[1]}"),
                     TimeReg = TimeSpan.Parse(datetime[1])
 
                 };
@@ -28,8 +28,5 @@ namespace TimeKeeper.Funtions
 
             return tiempos;
         }
-
-
-
     }
 }

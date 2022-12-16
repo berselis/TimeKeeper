@@ -15,6 +15,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = E:\GitHUB\TimeKeeper
 build_property._RazorSourceGeneratorDebug = 
 
+[E:/GitHUB/TimeKeeper/Views/CargaHoraria/PanelCarga.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ2FIb3JhcmlhXFBhbmVsQ2FyZ2EuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/GitHUB/TimeKeeper/Views/Empleado/Empleado.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbGVhZG9cRW1wbGVhZG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
