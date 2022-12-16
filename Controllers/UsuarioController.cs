@@ -9,18 +9,18 @@ namespace TimeKeeper.Controllers
     [Authorize(Policy = "IsAdmin")]
     public class UsuarioController : Controller
     {
-        private readonly TimeKeeperDBContext DB;
+        private readonly TimerKeeperDbContext _context;
         private readonly UserManager<Usuario> userManager;
 
-        public UsuarioController(TimeKeeperDBContext DB, UserManager<Usuario> userManager)
+        public UsuarioController(TimerKeeperDbContext DB, UserManager<Usuario> userManager)
         {
-            this.DB = DB;
+            this._context = DB;
             this.userManager = userManager;
         }
 
         public async Task<ActionResult> Index(string msj)
         {
-            List<Usuario> usuario = await DB.Usuarios.Select(sel => new Usuario
+            List<Usuario> usuario = await _context.Usuarios.Select(sel => new Usuario
             {
                 Id = sel.Id,
                 UserName = sel.UserName,
@@ -35,7 +35,7 @@ namespace TimeKeeper.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Usuario(Usuario model)
         {
-            Usuario usuario = await DB.Usuarios.FindAsync(model.Id);
+            Usuario usuario = await _context.Usuarios.FindAsync(model.Id);
 
 
             return RedirectToAction("Index", new { msj = "editado" });

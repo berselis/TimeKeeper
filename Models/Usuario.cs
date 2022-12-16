@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeKeeper.Models
 {
-    public class Usuario: IdentityUser
+    public class Usuario : IdentityUser
     {
-        [MaxLength(20)]
+        [Required, MaxLength(20)]
         public string RoleName { get; set; }
     }
 
@@ -18,6 +20,4 @@ namespace TimeKeeper.Models
         public string Password { get; set; }
         public string RoleName { get; set; }
     }
-
-
 }

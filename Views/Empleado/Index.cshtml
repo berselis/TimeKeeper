@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TimeKeeper.Models.Empleados>
+﻿@model IEnumerable<TimeKeeper.Models.Empleado>
 @{
     Layout = "_LayoutPanel";
 }
@@ -154,7 +154,7 @@
     function MostrarMensaje() {
         const msj = '@ViewBag.Msj';
 
-        console.log(msj);
+  
         switch (msj) {
             case "edited":
                 ShowDialog('Editado!!');

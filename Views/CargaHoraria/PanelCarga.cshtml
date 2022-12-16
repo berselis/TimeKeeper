@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TimeKeeper.DTOs.PanelCargaDTO
+@{
     Layout = "_LayoutPanel";
 }
 
@@ -20,19 +21,78 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
 
         <div class="col-md-12 col-sm-12 col-xs-12 upload-body">
-            <div class="wrapper">
+            <form class="wrapper" asp-controller="CargaHoraria" asp-action="UploadDataFile" method="post" enctype="multipart/form-data">
                 <div id="FormUploadExcel" class="form-upload-excel">
-                    <input type="file" id="ExcelFile" hidden="hidden" name="ExcelFilePlantillaIn" />
-                    <i class="bi bi-cloud-upload-fill"></i>
+                    <input type="file" id="ExcelFile" hidden="hidden" name="fileForm" />
+                    <i class="bi bi-file-earmark-ruled"></i>
                 </div>
                 <section id="ProgressArea" class="progress-area"></section>
                 <section id="UploadArea" class="uploaded-area"></section>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="alert alert-primary">
+            <div class="row">
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <ul class="list-inline-item list-inline">
+                        <li class="list-group-item active" aria-current="true">
+                            <strong class="align-content-center">Ultima carga</strong>
+                        </li>
+                        <li class="list-group-item">
+                            <h6><strong>Fecha actualizado</strong></h6>
+                            <h6>@Model.FechaActualizado</h6>
+                        </li>
+                        <li class="list-group-item">
+                            <h6><strong>Fecha aplicado</strong></h6>
+                            <h6>@Model.FechaAplicado</h6>
+                        </li>
+                        <li class="list-group-item">
+                            <h6><strong>Por usuario</strong></h6>
+                            <h6>@Model.Usuario</h6>
+                        </li>
+                    </ul>
+
+
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <table class="table" id="TablaCarga">
+                        <thead>
+                            <tr>
+                                <th>Fecha actualizado</th>
+                                <th>Fecha aplicado</th>
+                                <th>Usuario</th>
+                                <th>Comentario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                             <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
-
-
     </div>
+
 </div>
 
 <script type="text/javascript">
@@ -40,11 +100,47 @@
     const excelfileInput = document.getElementById('ExcelFile');
     const progresArea = document.getElementById('ProgressArea');
     const uploadArea = document.getElementById('UploadArea');
+    const cargaTable = document.getElementById('TablaCarga');
+    const rows = cargaTable.lastElementChild.childElementCount;
 
-    const FILETYPEBASE = {
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': true,
-        'application/vnd.ms-excel': true
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (rows > 1) {
+            let table = new DataTable(cargaTable, {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json'
+                }
+            });
+        }
+
+        MostrarMensaje();
+
+    });
+
+
+    function MostrarMensaje() {
+        const msj = '@Model.Msj';
+
+   
+        switch (msj) {
+            case "load":
+                ShowDialog('Cargado!!');
+                break;
+            default:
+                return;
+        }
+
+
+        function ShowDialog(text) {
+            swal({
+                title: text,
+                text: "Información del empleado",
+                icon: "success"
+            });
+        }
     }
+
+
 
 
     form.addEventListener('click', (e) => {
@@ -63,12 +159,11 @@
 
     function ValidateFile(file) {
 
-        console.log(file.type);
+        const format = file.name.split('.').find(item => item === 'dat');
 
-        let IsValidFile = FILETYPEBASE[file.type] || false;
-        if (IsValidFile == false) {
+        if (format != 'dat') {
             swal({
-                title: '.DAT | .xlsx | .xls',
+                title: '.DAT',
                 text: "Solo archivos permitidos",
                 icon: "error"
             });
@@ -82,6 +177,7 @@
     }
 
     function UploadFile(file) {
+        $(progresArea).fadeIn(50);
         let fileName = file.name;
         let loaded = 0;
         let total = file.size;
@@ -102,42 +198,49 @@
             if (fileLoadedPercent >= 100) fileLoadedPercent = 100;
             uploadArea.innerHTML = '';
             let progressHTML = `
-                                <ul>
-                                <li>
-                                    <i class="icofont icofont-file-excel"></i>
-                                    <div class="content">
-                                        <div class="details">
-                                            <span class="name">${fileName} ● Load</span>
-                                            <span class="percent">${fileLoadedPercent}%</span>
+                                    <ul>
+                                    <li>
+                                        <i class="icofont icofont-file-excel"></i>
+                                        <div class="content">
+                                            <div class="details">
+                                                <span class="name">${fileName} ● Load</span>
+                                                <span class="percent">${fileLoadedPercent}%</span>
+                                            </div>
+                                            <div class="progress-bar-excel">
+                                                <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
+                                            </div>
                                         </div>
-                                        <div class="progress-bar-excel">
-                                            <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
-                                        </div>
-                                    </div>
-                                </li>
-                                </ul>
-                                `;
+                                    </li>
+                                    </ul>
+                                    `;
 
             progresArea.innerHTML = progressHTML;
 
             if (loaded >= total) {
                 clearInterval(counts);
-                progresArea.innerHTML = '';
-                let doneHTML = `
-                                <ul>
-                                    <li>
-                                        <i class="icofont icofont-file-excel"></i>
-                                        <div class="content">
-                                            <div class="details">
-                                                <span class="name">${file.name}</span>
-                                                <span class="size">${fileSize}</span>
-                                            </div>
-                                        </div>
-                                            <i onclick="RemoveFile(this)" class="bi bi-check-circle-fill"></i>
-                                    </li>
-                                </ul>
-                                `;
-                uploadArea.innerHTML = doneHTML;
+                $(progresArea).fadeOut(150, function () {
+                    progresArea.innerHTML = '';
+                    let doneHTML = `
+                                        <ul>
+                                            <li>
+                                                <i class="icofont icofont-file-excel"></i>
+                                                <div class="content">
+                                                    <div class="details">
+                                                        <span class="name">${file.name}</span>
+                                                        <span class="size">${fileSize}</span>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-outline-success btn-sm">
+                                                    <i class="bi bi-file-arrow-up-fill"></i>
+                                                    <strong>Cargar</strong>
+                                                </button>
+                                                <i onclick="RemoveFile(this)" class="bi bi-x-circle-fill remove-file"></i>
+                                            </li>
+                                        </ul>
+                                        `;
+                    uploadArea.innerHTML = doneHTML;
+                })
+
             }
 
         }

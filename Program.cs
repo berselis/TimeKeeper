@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TimeKeeper;
 using TimeKeeper.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<TimeKeeperDBContext>(option =>
+builder.Services.AddDbContext<TimerKeeperDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"));
 });
@@ -37,7 +35,7 @@ builder.Services.AddIdentity<Usuario, IdentityRole>(option =>
 
     })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<TimeKeeperDBContext>()
+    .AddEntityFrameworkStores<TimerKeeperDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthorization(options =>
@@ -74,6 +72,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
+
 
 app.UseAuthorization();
 

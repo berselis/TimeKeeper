@@ -78,6 +78,7 @@ body {
             .upload-body > .wrapper > .form-upload-excel:hover {
                 opacity: 1;
             }
+
                 .upload-body > .wrapper > .form-upload-excel:hover > i {
                     transform: translateY(-10px);
                     transition: all 0.5s ease;
@@ -121,7 +122,10 @@ body {
 
             .upload-body > .wrapper > section > ul > li > i {
                 font-size: 25px;
-                color: #006effc4;
+                margin-left:10px;
+                color: #4fb357;
+                cursor:pointer;
+                opacity: 0.5;
                 transition: all 0.5s ease;
                 -webkit-transition: all 0.5s ease;
                 -moz-transition: all 0.5s ease;
@@ -129,23 +133,19 @@ body {
                 -o-transition: all 0.5s ease;
             }
 
-            .upload-body > .wrapper > section > ul > li > .icofont-eye {
-                cursor: pointer;
-                opacity: 0.60;
-                transition: all 0.5s ease;
-                -webkit-transition: all 0.5s ease;
-                -moz-transition: all 0.5s ease;
-                -ms-transition: all 0.5s ease;
-                -o-transition: all 0.5s ease;
-            }
-
-                .upload-body > .wrapper > section > ul > li > .icofont-eye:hover {
+                .upload-body > .wrapper > section > ul > li > i:hover {
+                    color: #2df73d;
                     opacity: 1;
+                    transition: all 0.5s ease;
+                    -webkit-transition: all 0.5s ease;
+                    -moz-transition: all 0.5s ease;
+                    -ms-transition: all 0.5s ease;
+                    -o-transition: all 0.5s ease;
                 }
 
-        .upload-body > .wrapper > section > ul {
-            margin: 0px !important;
-        }
+
+
+
 
             .upload-body > .wrapper > section > ul > li > .content {
                 position: relative;
@@ -189,23 +189,20 @@ body {
                 line-height: 8px;
             }
 
-        .upload-body > .wrapper > .uploaded-area > ul > li > .icofont-ui-check:hover {
-            cursor: pointer;
-            color: #FF2800;
-        }
+.progress-area > ul,
+.uploaded-area > ul {
+    padding: 0;
+    margin: 0;
+}
 
-            .upload-body > .wrapper > .uploaded-area > ul > li > .icofont-ui-check:hover:before {
-                content: "\ed2b";
-            }
+.upload-body > .wrapper > .uploaded-area {
+    max-height: 180px;
+    overflow-y: scroll;
+}
 
-        .upload-body > .wrapper > .uploaded-area {
-            max-height: 180px;
-            overflow-y: scroll;
-        }
-
-            .upload-body > .wrapper > .uploaded-area::-webkit-scrollbar {
-                width: 0px;
-            }
+    .upload-body > .wrapper > .uploaded-area::-webkit-scrollbar {
+        width: 0px;
+    }
 
 .text-warning-table-convert {
     margin-left: 25px;

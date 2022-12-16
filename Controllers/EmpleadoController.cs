@@ -9,25 +9,25 @@ namespace TimeKeeper.Controllers
     [Authorize]
     public class EmpleadoController : Controller
     {
-        private readonly TimeKeeperDBContext DB;
-        public EmpleadoController(TimeKeeperDBContext context)
+        private readonly TimerKeeperDbContext _context;
+        public EmpleadoController(TimerKeeperDbContext context)
         {
-            DB = context;
+            _context = context;
         }
 
 
         public async Task<IActionResult> Index(string msj)
         {
-            List<Empleados> empleados = await DB.Empleados.ToListAsync();
+            List<Empleado> empleados = await _context.Empleados.ToListAsync();
             ViewBag.Msj = msj;
             return View(empleados);
         }
 
-        public async Task<IActionResult> Registrar(Empleados model)
+        public async Task<IActionResult> Registrar(Empleado model)
         {
             
-            DB.Empleados.Add(model);
-            await DB.SaveChangesAsync();
+            _context.Empleados.Add(model);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { msj = "added" });
         }
 
@@ -35,16 +35,16 @@ namespace TimeKeeper.Controllers
         [HttpGet("id:int")]
         public async Task<IActionResult> Empleado(int Id)
         {
-            Empleados empleado = await DB.Empleados.FindAsync(Id);
+            Empleado empleado = await _context.Empleados.FindAsync(Id);
             return View(empleado);
         }
         [HttpPost]
-        public async Task<IActionResult> EditarEmpleado(Empleados model)
+        public async Task<IActionResult> EditarEmpleado(Empleado model)
         {
-            Empleados empleado = await DB.Empleados.FindAsync(model.IdEmpleado);
+            Empleado empleado = await _context.Empleados.FindAsync(model.IdEmpleado);
             empleado.Nombre = model.Nombre;
             empleado.Departamento = model.Departamento;
-            await DB.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new {msj = "edited"});
         }
     }
