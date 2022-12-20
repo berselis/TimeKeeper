@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using TimeKeeper.Funtions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using TimeKeeper.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace TimeKeeper.Controllers
 {
@@ -18,11 +14,7 @@ namespace TimeKeeper.Controllers
         private readonly UserManager<Usuario> userManager;
         private readonly TimerKeeperDbContext _context;
 
-        public HomeController(
-            ILogger<HomeController> logger,
-            SignInManager<Usuario> signInManager,
-            UserManager<Usuario> userManager,
-            TimerKeeperDbContext context)
+        public HomeController(ILogger<HomeController> logger,SignInManager<Usuario> signInManager,UserManager<Usuario> userManager,TimerKeeperDbContext context)
         {
             _logger = logger;
             this.signInManager = signInManager;

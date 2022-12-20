@@ -1,0 +1,185 @@
+﻿@{
+    Layout = "_LayoutPanel";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <a href="@Url.Action("PanelReport","Reporte")" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Panel reportes</span>
+        </a>
+
+        <div class="text-center">
+
+            <h5 class="display-5"><strong>Asistencia daria</strong></h5>
+        </div>
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+           
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <label for="FechaIni" class="form-label">
+                    <strong>Fecha</strong>
+                </label>
+                <div class="input-group mb-3">
+                   
+                    <input type="date" class="form-control" id="FechaIni" value="2022-12-17">
+                    <button onclick="FindData()" class="btn btn-outline-primary" type="button">
+                        <i class="bi bi-search"></i>
+                        <span>Buscar</span>
+                    </button>
+                </div>
+               
+            </div>
+
+            <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="btn-group float-end mt-4" role="group">
+                    <a href="#" class="btn btn-outline-success">
+                        <i class="bi bi-file-earmark-excel-fill"></i>
+                        <span>Descargar Excel</span>
+                    </a>
+                    <a href="#" class="btn btn-outline-success">
+                        <i class="bi bi-printer-fill"></i>
+                        <span>Imprimir</span>
+                    </a>
+
+
+                </div>
+            </div>
+
+        </div>
+      
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12 position-relative">
+
+                <div id="DotSpin" class="position-absolute w-100" style="background-color: rgb(255, 255, 255, 60%); display:none">
+                    <div class="pg-loading-inner">
+                        <div class="pg-loading-center-outer">
+                            <div class="pg-loading-center-middle">
+
+                                <div class="pg-loading-html pg-loaded">
+
+                                    <div class="sk-flow">
+                                        <div class="sk-flow-dot"></div>
+                                        <div class="sk-flow-dot"></div>
+                                        <div class="sk-flow-dot"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <table id="EmployTable" class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Empleados</th>
+                            <th>Horas</th>
+                            <th>Cantidad</th>
+                            <th>Total horas</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    const fechaIni = document.getElementById('FechaIni');
+    const dotSpin = document.getElementById('DotSpin');
+    const tablaEmploy = document.getElementById('EmployTable');
+    const url = '@Url.Action("FindData","Reporte")'
+
+    function ValidateParameters(){
+
+        if(fechaIni.value == ''){
+            swal({
+                title: 'Debe selecionar una fecha',
+                text: "Paramtros",
+                icon: 'warning'
+            });
+            return false;
+        }
+        return true;
+    }
+
+    function FindData(){
+        if (ValidateParameters()){
+            const body = tablaEmploy.lastElementChild;
+
+            $(body).fadeOut(300, function(){
+                body.innerHTML = '';
+                $(dotSpin).fadeIn(100);
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                    type: "application/json",
+                    data: { dateFirst: fechaIni.value },
+                    success: (query) => {
+
+                        if (query.length > 0) {
+
+
+                            query.forEach(row =>{
+                                const tr = document.createElement('tr');
+
+
+                                const empl = document.createElement('td');
+                                empl.innerText = row.empleado;
+                                tr.appendChild(empl);
+
+                                const hors = document.createElement('td');
+                                const list = document.createElement('ul');
+                                row.horas.forEach(t => {
+                                    const li = document.createElement('li');
+                                    li.innerText = t;
+                                    list.appendChild(li);
+                                })
+
+                                hors.appendChild(list);
+                                tr.appendChild(hors);
+
+                                const cant = document.createElement('td');
+                                cant.innerText = row.cantRegistros;
+                                tr.appendChild(cant);
+
+                                const totalH = document.createElement('td');
+                                totalH.innerText = row.totalHora;
+                                tr.appendChild(totalH);
+
+                                body.appendChild(tr);
+                            });
+
+                        } else {
+                            const tr = document.createElement('tr');
+                            $(tr).append('<td colspan="4"><h4 class="text-center text-danger"><strong>No hay registros!!!</strong></h4></td>');
+
+                            body.appendChild(tr);
+                        }
+
+                        $(dotSpin).fadeOut(100);
+                        $(body).show(100);
+                    },
+                    error: (error) => {
+                        console.log(error);
+                    }
+                });
+            });
+
+        }
+    }
+</script>

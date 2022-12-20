@@ -15,7 +15,6 @@ builder.Services.AddDbContext<TimerKeeperDbContext>(option =>
 });
 
 builder.Services.AddAuthentication()
-    
     .AddCookie(option =>
     {
         option.LoginPath = "/Home/Index";
@@ -65,6 +64,13 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+using(var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TimerKeeperDbContext>();
+    db.Database.Migrate();
+}
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

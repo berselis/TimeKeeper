@@ -25,7 +25,7 @@ namespace TimeKeeper.Controllers
 
         public async Task<IActionResult> Registrar(Empleado model)
         {
-            
+            model.Estado = "ACTIVO";
             _context.Empleados.Add(model);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index), new { msj = "added" });

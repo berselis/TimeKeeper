@@ -106,7 +106,7 @@ namespace TimeKeeper.Controllers
                 return RedirectToAction(nameof(PanelCarga), new { msj = "success" });
 
             }
-            catch (Exception ex)
+            catch
             {
                 return RedirectToAction(nameof(PanelCarga), new { msj = "error" });
             }
