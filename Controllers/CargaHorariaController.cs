@@ -98,7 +98,7 @@ namespace TimeKeeper.Controllers
                     NombreUsuario = User.Identity.Name,
                     FechaRegistro = timeRegisters.Last().DateReg,
                     FechaAplicado = DateTime.Now,
-                    Comentario = $"{totalReg} de {filterReg} Reg"
+                    Comentario = $"{filterReg} de {totalReg} Reg"
                 };
 
                 _context.RegistrosCargas.Add(reg);

@@ -1,5 +1,7 @@
 ﻿@{
     Layout = "_LayoutPanel";
+    string theDay = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+
 }
 
 <div class="row">
@@ -25,7 +27,7 @@
                 </label>
                 <div class="input-group mb-3">
                    
-                    <input type="date" class="form-control" id="FechaIni" value="2022-12-17">
+                    <input type="date" class="form-control" id="FechaIni" value="@theDay">
                     <button onclick="FindData()" class="btn btn-outline-primary" type="button">
                         <i class="bi bi-search"></i>
                         <span>Buscar</span>
