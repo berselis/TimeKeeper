@@ -12,9 +12,13 @@ namespace TimeKeeper.Funtions
             foreach (Empleado empleado in empleados)
             {
                 List<Tiempo> timeFilter = tiempos.Where(whe => whe.IdEmpleado == empleado.IdEmpleado).ToList();
-                TimeSpan totalHours = new(0, 0, 0);
+                TimeSpan totalHours = new(0, 0, 0), timeOut = new(0, 0, 0);
 
                 TimeSpan[] horas = timeFilter.Select(sel => sel.TimeReg).ToArray();
+                TimeSpan outH = timeFilter.Where(time => time.HasTimeOutOfRange).Select(sel => sel.TimeOut).LastOrDefault();
+                if (outH.TotalMinutes > 0) timeOut = outH;
+               
+
                 int size = horas.Length;
                 switch (size)
                 {
@@ -23,10 +27,11 @@ namespace TimeKeeper.Funtions
                         break;
                     case 2:
                     case 3:
-                        totalHours = horas[1] - horas[0];
+                        totalHours = (horas[1] - horas[0]) + timeOut;
                         break;
                     case 4:
-                        totalHours = (horas[1] - horas[0]) + (horas[3] - horas[2]);
+                    case 5:
+                        totalHours = ((horas[1] - horas[0]) + (horas[3] - horas[2])) + timeOut;
                         break;
                 }
 
@@ -37,7 +42,13 @@ namespace TimeKeeper.Funtions
                     Empleado = empleado.Nombre,
                     IdEmpleado = empleado.IdEmpleado,
                     HasImg = empleado.HasImg,
-                    Horas = timeFilter.Select(sel => sel.DateReg.ToString("hh:mm tt")).ToList(),
+                    Horas = timeFilter.Select(sel => new Hora
+                    {
+                        HoraReg = sel.DateReg.ToString("hh:mm tt"),
+                        HasTimeOutOfRange = sel.HasTimeOutOfRange,
+                        TimeOutOfRange = sel.TimeOut.ToString().Substring(0, 5)
+                    }).ToList(),
+
                     CantRegistros = timeFilter.Count(),
                     TotalHora = $"{totalHours.Days * 24 + totalHours.Hours}h y {totalHours.Minutes}m"
                 };

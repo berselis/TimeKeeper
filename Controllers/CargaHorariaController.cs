@@ -14,13 +14,13 @@ namespace TimeKeeper.Controllers
     public class CargaHorariaController : Controller
     {
 
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly TimerKeeperDbContext _context;
+        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly TimerKeeperDbContext context;
 
         public CargaHorariaController(IWebHostEnvironment webHostEnvironment, TimerKeeperDbContext context)
         {
-            _webHostEnvironment = webHostEnvironment;
-            _context = context;
+            this.webHostEnvironment = webHostEnvironment;
+            this.context = context;
         }
 
         public async Task<IActionResult> PanelCarga(string msj)
@@ -35,17 +35,14 @@ namespace TimeKeeper.Controllers
                 Cargas = new List<RegistroCarga>()
             };
 
-            if(await _context.RegistrosCargas.AnyAsync())
+            if(await context.RegistrosCargas.AnyAsync())
             {
-                List<RegistroCarga> registroCargas = await _context.RegistrosCargas.ToListAsync();
+                List<RegistroCarga> registroCargas = await context.RegistrosCargas.ToListAsync();
                 RegistroCarga last = registroCargas.Last();
-
                 panelCarga.Usuario = last.NombreUsuario;
                 panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
                 panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
-
                 panelCarga.Cargas = registroCargas;
-
             }
            
             return View(panelCarga);
@@ -61,7 +58,7 @@ namespace TimeKeeper.Controllers
                 if (format != "dat") return RedirectToAction(nameof(PanelCarga), new { msj = "invalidFormat" });
                 DateTime today = DateTime.Now;
                 string prefix = $"{today.Year}{today.Month}{today.Day}{today.Hour}{today.Minute}{today.Second}_";
-                string root = Path.Combine(_webHostEnvironment.WebRootPath, "media", "files");
+                string root = Path.Combine(webHostEnvironment.WebRootPath, "media", "files");
                 string fileRoot = Path.Combine(root, $"{prefix}{fileForm.FileName}");
                 Stream stream = new FileStream(fileRoot, FileMode.Create);
                 await fileForm.CopyToAsync(stream);
@@ -79,9 +76,9 @@ namespace TimeKeeper.Controllers
 
                 int totalReg = timeRegisters.Count;
 
-                if (_context.RegistrosCargas.Any())
+                if (context.RegistrosCargas.Any())
                 {
-                    List<RegistroCarga> registroCargas = await _context.RegistrosCargas.ToListAsync();
+                    List<RegistroCarga> registroCargas = await context.RegistrosCargas.ToListAsync();
                     RegistroCarga last = registroCargas.Last();
                     timeRegisters = timeRegisters.Where(whe => whe.DateReg > last.FechaRegistro).ToList();
                 }
@@ -90,7 +87,7 @@ namespace TimeKeeper.Controllers
 
                 if(filterReg <= 0) return RedirectToAction(nameof(PanelCarga), new { msj = "duplicated" });
 
-                _context.Tiempos.AddRange(timeRegisters);
+                context.Tiempos.AddRange(timeRegisters);
 
 
                 RegistroCarga reg = new()
@@ -101,8 +98,8 @@ namespace TimeKeeper.Controllers
                     Comentario = $"{filterReg} de {totalReg} Reg"
                 };
 
-                _context.RegistrosCargas.Add(reg);
-                await _context.SaveChangesAsync();
+                context.RegistrosCargas.Add(reg);
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(PanelCarga), new { msj = "success" });
 
             }

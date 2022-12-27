@@ -10,10 +10,10 @@ namespace TimeKeeper.Controllers
     [Authorize]
     public class ReporteController : Controller
     {
-        private readonly TimerKeeperDbContext _context;
+        private readonly TimerKeeperDbContext context;
         public ReporteController(TimerKeeperDbContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         public IActionResult PanelReport() => View();
@@ -27,8 +27,8 @@ namespace TimeKeeper.Controllers
                 DateTime begin = Convert.ToDateTime(dateFirst);
                 DateTime end = begin.AddHours(23).AddMinutes(59).AddSeconds(59);
 
-                List<Empleado> empleados = await _context.Empleados.Where(whe => whe.Estado.Equals("ACTIVO")).ToListAsync();
-                List<Tiempo> tiempos = await _context.Tiempos.Where(whe => begin <= whe.DateReg && whe.DateReg <= end).ToListAsync();
+                List<Empleado> empleados = await context.Empleados.Where(whe => whe.Estado.Equals("ACTIVO")).ToListAsync();
+                List<Tiempo> tiempos = await context.Tiempos.Where(whe => begin <= whe.DateReg && whe.DateReg <= end).ToListAsync();
 
                 
                 return Json(TimerProcess.GetDailyAssist(empleados, tiempos));

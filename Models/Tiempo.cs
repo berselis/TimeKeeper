@@ -15,7 +15,10 @@ namespace TimeKeeper.Models
         public DateTime DateReg { get; set; }
         [Required]
         public TimeSpan TimeReg { get; set; }
-
+        [Required]
+        public bool HasTimeOutOfRange { get; set; }
+        [Required]
+        public TimeSpan TimeOut { get; set; }
         public Empleado Empleado { get; set; }
     }
 }

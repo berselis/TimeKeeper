@@ -23,6 +23,9 @@ namespace TimeKeeper
             foreach (var fk in cascadeFKs)
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
 
+            builder.Entity<Tiempo>().Property(tiempo => tiempo.TimeOut).HasDefaultValue(new TimeSpan(0,0,0));
+            builder.Entity<Tiempo>().Property(tiempo => tiempo.HasTimeOutOfRange).HasDefaultValue(0);
+
 
 
             //PARA CREAR TABLA CON ID COMBINADO

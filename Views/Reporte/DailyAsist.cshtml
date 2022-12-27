@@ -1,7 +1,6 @@
 ﻿@{
     Layout = "_LayoutPanel";
     string theDay = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
-
 }
 
 <div class="row">
@@ -38,10 +37,10 @@
 
             <div class="col-md-8 col-sm-8 col-xs-12">
                 <div class="btn-group float-end mt-4" role="group">
-                    <a href="#" class="btn btn-outline-success">
+                    <button type="button" onclick="ExcelExport()" class="btn btn-outline-success">
                         <i class="bi bi-file-earmark-excel-fill"></i>
                         <span>Descargar Excel</span>
-                    </a>
+                    </button>
                     <a href="#" class="btn btn-outline-success">
                         <i class="bi bi-printer-fill"></i>
                         <span>Imprimir</span>
@@ -80,6 +79,7 @@
                 <table id="EmployTable" class="table">
                     <thead class="table-dark">
                         <tr>
+                            <th>#</th>
                             <th>Empleados</th>
                             <th>Horas</th>
                             <th>Cantidad</th>
@@ -134,11 +134,18 @@
                     success: (query) => {
 
                         if (query.length > 0) {
-
+                            let index = 1;
 
                             query.forEach(row =>{
+                                console.log(row);
+
                                 const tr = document.createElement('tr');
 
+                                const numb = document.createElement('td');
+                                numb.innerText = index;
+                                tr.appendChild(numb);
+
+                                index++;
 
                                 const empl = document.createElement('td');
                                 empl.innerText = row.empleado;
@@ -146,9 +153,27 @@
 
                                 const hors = document.createElement('td');
                                 const list = document.createElement('ul');
+                                list.className = 'list-group list-group-flush';
                                 row.horas.forEach(t => {
                                     const li = document.createElement('li');
-                                    li.innerText = t;
+                                    li.className = 'list-group-item';
+
+                                    const spanReg = document.createElement('span');
+                                    spanReg.innerText = t.horaReg;
+                                    li.appendChild(spanReg);
+
+                                    if(t.hasTimeOutOfRange){
+                                        li.classList.add('text-danger');
+                                        const spanOut = document.createElement('span');
+                                        spanOut.innerText = ` => ${t.timeOutOfRange}`;
+                                        li.appendChild(spanOut);
+                                    }
+                                   
+
+
+
+
+
                                     list.appendChild(li);
                                 })
 
@@ -164,11 +189,12 @@
                                 tr.appendChild(totalH);
 
                                 body.appendChild(tr);
+                                
                             });
 
                         } else {
                             const tr = document.createElement('tr');
-                            $(tr).append('<td colspan="4"><h4 class="text-center text-danger"><strong>No hay registros!!!</strong></h4></td>');
+                            $(tr).append('<td colspan="5"><h4 class="text-center text-danger"><strong>No hay registros!!!</strong></h4></td>');
 
                             body.appendChild(tr);
                         }
@@ -183,5 +209,43 @@
             });
 
         }
+    }
+
+    function ExcelExport() {
+        if (tablaEmploy.firstElementChild.childElementCount > 0) {
+
+            const header = document.createElement('thead');
+
+            //#region INSERT TITULO A TABLA
+            const fila = document.createElement('tr');
+
+            const ini = document.createElement('th');
+            ini.colSpan = 3;
+            const iniLabel = document.createElement('label');
+            const iniStrong = document.createElement('strong');
+            iniStrong.innerText = 'Fecha';
+            iniLabel.appendChild(iniStrong);
+            ini.appendChild(iniLabel);
+            const iniText = document.createElement('h4');
+            iniText.innerText = fechaIni.value;
+            iniText.style = 'text-align:left;';
+            ini.appendChild(iniText);
+            fila.appendChild(ini);
+
+            //#endregion
+
+            header.appendChild(fila);
+
+            const table = $("#EmployTable").prepend(header);
+            if (table && table.length) {
+                $(table).table2excel({
+                    name: "Excel Document Name",
+                    filename: "AsistenciaDiaria.xls",
+                    fileext: ".xls",
+                });
+            }
+            table[0].firstElementChild.remove();
+        }
+
     }
 </script>

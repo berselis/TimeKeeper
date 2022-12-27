@@ -300,8 +300,18 @@ namespace TimeKeeper.Migrations
                     b.Property<int?>("EmpleadoIdEmpleado")
                         .HasColumnType("int");
 
+                    b.Property<bool>("HasTimeOutOfRange")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<int>("IdEmpleado")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan>("TimeOut")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("time")
+                        .HasDefaultValue(new TimeSpan(0, 0, 0, 0, 0));
 
                     b.Property<TimeSpan>("TimeReg")
                         .HasColumnType("time");
