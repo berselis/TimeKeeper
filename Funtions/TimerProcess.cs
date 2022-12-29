@@ -46,7 +46,7 @@ namespace TimeKeeper.Funtions
                     }).ToList(),
 
                     CantRegistros = timeFilter.Count,
-                    TotalHora = $"{totalHours.Days * 24 + totalHours.Hours}h y {totalHours.Minutes}m"
+                    TotalHora = $"{totalHours.Days * 24 + totalHours.Hours}h:{totalHours.Minutes}m"
                 };
 
                 if (dto.CantRegistros > 0) result.Add(dto);
@@ -77,7 +77,7 @@ namespace TimeKeeper.Funtions
                     Number = number,
                     Empleado = empleado.Nombre,
 
-                    TotalHora = $"{totalHours.Days * 24 + totalHours.Hours}h y {totalHours.Minutes}m"
+                    TotalHora = $"{totalHours.Days * 24 + totalHours.Hours}h:{totalHours.Minutes}m"
                 };
                 if (timeFilter.Count > 0)
                 {

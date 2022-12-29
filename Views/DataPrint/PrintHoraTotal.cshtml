@@ -4,6 +4,14 @@
     int number = 1;
 }
 
+<style>
+    .date-display{
+        display: flex;
+        column-gap: 25px;
+    }
+
+</style>
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -15,7 +23,7 @@
 
     </div>
     <div class="col-xs-12">
-        <div class="row d-flex justify-content-center align-items-center">
+        <div class="date-display">
 
             <div class="col-xs-4 col-sm-4 col-md-4">
                 <label class="form-label">
@@ -81,7 +89,7 @@
 
 
     function Redirect() {
-        window.location.replace('@Url.Action("HorasRegist", "Reportes")');
+        window.location.replace('@Url.Action("HorasRegist", "Reporte")');
     }
 
 
