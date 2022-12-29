@@ -1,0 +1,259 @@
+﻿@{
+    Layout = "_LayoutPanel";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        <a href="@Url.Action("PanelReport","Reporte")" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Panel reportes</span>
+        </a>
+
+        <div class="text-center">
+
+            <h5 class="display-5"><strong>Horas registradas</strong></h5>
+        </div>
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <form asp-controller="DataPrint" asp-action="PrintHoraTotal" method="post" enctype="multipart/form-data">
+
+            <div class="row">
+
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    <label for="FechaIni" class="form-label">
+                        <strong>Fecha inicial</strong>
+                    </label>
+                    <div class="input-group mb-3">
+                        <input type="date" class="form-control" id="FechaIni" name="FechaIni" required>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <label for="FechaFin" class="form-label">
+                        <strong>Fecha final</strong>
+                    </label>
+                    <div class="input-group mb-3">
+
+                        <input type="date" class="form-control" id="FechaFin" name="FechaFin" required>
+                        <button onclick="FindData()" class="btn btn-outline-primary" type="button">
+                            <i class="bi bi-search"></i>
+                            <span>Buscar</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="col-md-5 col-sm-5 col-xs-12">
+                    <div class="btn-group float-end mt-4" role="group">
+                        <button type="button" onclick="ExcelExport()" class="btn btn-outline-success">
+                            <i class="bi bi-file-earmark-excel-fill"></i>
+                            <span>Descargar Excel</span>
+                        </button>
+                        <button type="submit" href="#" class="btn btn-outline-success">
+                            <i class="bi bi-printer-fill"></i>
+                            <span>Imprimir</span>
+                        </button>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </form>
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12 position-relative">
+
+                <div id="DotSpin" class="position-absolute w-100" style="background-color: rgb(255, 255, 255, 60%); display:none">
+                    <div class="pg-loading-inner">
+                        <div class="pg-loading-center-outer">
+                            <div class="pg-loading-center-middle">
+
+                                <div class="pg-loading-html pg-loaded">
+
+                                    <div class="sk-flow">
+                                        <div class="sk-flow-dot"></div>
+                                        <div class="sk-flow-dot"></div>
+                                        <div class="sk-flow-dot"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <table id="EmployTable" class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Empleados</th>
+                            <th>Total horas</th>
+                        </tr>
+
+                    </thead>
+                    <tbody></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    const fechaIni = document.getElementById('FechaIni');
+    const fechaFin = document.getElementById('FechaFin');
+    const dotSpin = document.getElementById('DotSpin');
+    const tablaEmploy = document.getElementById('EmployTable');
+    const url = '@Url.Action("FinDataTotalHours","Reporte")';
+
+
+    function ValidateParameters() {
+
+        if (fechaIni.value == '') {
+            swal({
+                title: 'Debe selecionar fecha inicial',
+                text: "Parametros",
+                icon: 'warning'
+            });
+            return false;
+        }
+
+        if (fechaFin.value == '') {
+            swal({
+                title: 'Debe selecionar fecha final',
+                text: "Parametros",
+                icon: 'warning'
+            });
+            return false;
+        }
+
+
+
+        return true;
+    }
+
+    function FindData() {
+        if (ValidateParameters()) {
+            const body = tablaEmploy.lastElementChild;
+
+            $(body).fadeOut(300, function () {
+                body.innerHTML = '';
+                $(dotSpin).fadeIn(100);
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                    type: "application/json",
+                    data: { fechaIni: fechaIni.value, fechaFin: fechaFin.value },
+                    success: (query) => {
+
+                        if (query.length > 0) {
+                            let index = 1;
+
+                            query.forEach(row => {
+
+                                const tr = document.createElement('tr');
+
+                                const numb = document.createElement('td');
+                                numb.innerText = index;
+                                tr.appendChild(numb);
+
+                                index++;
+
+                                const empl = document.createElement('td');
+                                empl.innerText = row.empleado;
+                                tr.appendChild(empl);
+
+
+
+
+                                const totalH = document.createElement('td');
+                                totalH.innerText = row.totalHora;
+                                tr.appendChild(totalH);
+
+                                body.appendChild(tr);
+
+                            });
+
+                        } else {
+                            const tr = document.createElement('tr');
+                            $(tr).append('<td colspan="3"><h4 class="text-center text-danger"><strong>No hay registros!!!</strong></h4></td>');
+
+                            body.appendChild(tr);
+                        }
+
+                        $(dotSpin).fadeOut(100);
+                        $(body).show(100);
+                    },
+                    error: (error) => {
+                        console.log(error);
+                    }
+                });
+            });
+
+        }
+    }
+
+    function ExcelExport() {
+        if (tablaEmploy.lastElementChild.childElementCount > 0) {
+
+            const header = document.createElement('thead');
+
+            //#region INSERT TITULO A TABLA
+            const fila = document.createElement('tr');
+
+            const ini = document.createElement('th');
+            ini.colSpan = 2;
+            const iniLabel = document.createElement('label');
+            const iniStrong = document.createElement('strong');
+            iniStrong.innerText = 'Fecha inicial';
+            iniLabel.appendChild(iniStrong);
+            ini.appendChild(iniLabel);
+            const iniText = document.createElement('h4');
+            iniText.innerText = fechaIni.value;
+            iniText.style = 'text-align:left;';
+            ini.appendChild(iniText);
+            fila.appendChild(ini);
+
+            const fin = document.createElement('th');
+            const finLabel = document.createElement('label');
+            const finStrong = document.createElement('strong');
+            finStrong.innerText = 'Fecha final';
+            finLabel.appendChild(finStrong);
+            fin.appendChild(finLabel);
+            const finText = document.createElement('h4');
+            finText.innerText = fechaFin.value;
+            finText.style = 'text-align:left;';
+            fin.appendChild(finText);
+            fila.appendChild(fin);
+
+            //#endregion
+
+            header.appendChild(fila);
+
+            const table = $("#EmployTable").prepend(header);
+            if (table && table.length) {
+                $(table).table2excel({
+                    name: "Excel Document Name",
+                    filename: "HorasRegistradas.xls",
+                    fileext: ".xls",
+                });
+            }
+            table[0].firstElementChild.remove();
+        }
+
+    }
+
+
+
+
+
+</script>

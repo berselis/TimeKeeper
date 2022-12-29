@@ -5,7 +5,6 @@ namespace TimeKeeper.Funtions
 {
     public static class DatFileProces
     {
-
         public static List<Tiempo> GetDtoTiempos(string content)
         {
             List<Tiempo> tiempos = new();
@@ -37,22 +36,17 @@ namespace TimeKeeper.Funtions
                 tiempo.DateReg = date;
                 tiempo.TimeReg = time;
 
-
-
-
                 tiempos.Add(tiempo);
             }
 
             return tiempos;
         }
-
         private static bool IsValidRangeTime(TimeSpan time)
         {
-            TimeSpan timeBegin = new(0, 0, 1);
+            TimeSpan timeBegin = new(0, 0, 0);
             TimeSpan timeEnd = new(6, 25, 59);
             if (timeBegin < time && time <= timeEnd) return false;
             return true;
         }
-
     }
 }

@@ -23,12 +23,22 @@ namespace TimeKeeper.Controllers
             return View(empleados);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Registrar(Empleado model)
         {
-            model.Estado = "ACTIVO";
-            _context.Empleados.Add(model);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { msj = "added" });
+            try
+            {
+                _context.Empleados.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { msj = "added" });
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction(nameof(Index), new { msj = "error" });
+            }
+
+           
         }
 
 
@@ -45,7 +55,7 @@ namespace TimeKeeper.Controllers
             empleado.Nombre = model.Nombre;
             empleado.Departamento = model.Departamento;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new {msj = "edited"});
+            return RedirectToAction(nameof(Index), new { msj = "edited" });
         }
     }
 }

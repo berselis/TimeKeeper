@@ -104,7 +104,7 @@
     const fechaIni = document.getElementById('FechaIni');
     const dotSpin = document.getElementById('DotSpin');
     const tablaEmploy = document.getElementById('EmployTable');
-    const url = '@Url.Action("FindData","Reporte")'
+    const url = '@Url.Action("FinDataDailyAsist","Reporte")';
 
     function ValidateParameters(){
 
@@ -137,7 +137,6 @@
                             let index = 1;
 
                             query.forEach(row =>{
-                                console.log(row);
 
                                 const tr = document.createElement('tr');
 
