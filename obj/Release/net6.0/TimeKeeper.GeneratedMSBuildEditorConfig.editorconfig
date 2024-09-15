@@ -19,6 +19,14 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ2FIb3JhcmlhXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/GitHUB/3.NETcore/TimeKeeper/Views/CargaHoraria/PanelCargaBocaChica.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ2FIb3JhcmlhXFBhbmVsQ2FyZ2FCb2NhQ2hpY2EuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/GitHUB/3.NETcore/TimeKeeper/Views/CargaHoraria/PanelCargaLaRomana.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ2FIb3JhcmlhXFBhbmVsQ2FyZ2FMYVJvbWFuYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/GitHUB/3.NETcore/TimeKeeper/Views/CargaHoraria/PanelCargaSanPedroCentral.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FyZ2FIb3JhcmlhXFBhbmVsQ2FyZ2FTYW5QZWRyb0NlbnRyYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -47,8 +55,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZVxEYWlseUFzaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/GitHUB/3.NETcore/TimeKeeper/Views/Reporte/HorasRegist.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZVxIb3Jhc1JlZ2lzdC5jc2h0bWw=
+[E:/GitHUB/3.NETcore/TimeKeeper/Views/Reporte/HorasTotales.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0ZVxIb3Jhc1RvdGFsZXMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/GitHUB/3.NETcore/TimeKeeper/Views/Reporte/PanelReport.cshtml]

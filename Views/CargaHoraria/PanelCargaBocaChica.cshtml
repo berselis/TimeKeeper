@@ -22,7 +22,7 @@
     
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-12 col-sm-12 col-xs-12 upload-body">
-            <form class="wrapper" asp-controller="CargaHoraria" asp-action="UploadDataFileSanPedroCentral" method="post" enctype="multipart/form-data">
+            <form class="wrapper" asp-controller="CargaHoraria" asp-action="#" method="post" enctype="multipart/form-data">
                 <div id="FormUploadExcel" class="form-upload-excel">
                     <input type="file" id="ExcelFile" hidden="hidden" name="fileForm" />
                     <i class="bi bi-file-earmark-ruled"></i>
@@ -91,6 +91,7 @@
 </div>
 
 <script type="text/javascript">
+    const CENTER_NAME = 'MICHELINEBOCACHICA';
     const FILE_NAME = '@fileName';
     const form = document.getElementById('FormUploadExcel');
     const excelfileInput = document.getElementById('ExcelFile');
@@ -163,19 +164,34 @@
 
     function ValidateFile(file) {
 
-        const format = file.name.split('.').find(item => item === 'xls');
+        const fileName = file.name.split('.');
+        const extentions = file.name.split('.').find(item => item === 'xls');
 
-        console.log(file.name.split('.'));
-
-        if (format != 'xls') {
+        if (extentions != 'xls') {
             swal({
                 title: '.XLS',
-                text:'',
-                content: `<p>Solo archivos permitidos</p> <strong>${FILE_NAME}</strong>`,
-                icon: "error"
+                text: `Solo archivos permitidos ${FILE_NAME}`,
+                icon: "error",
+                dangerMode: true,
             });
             return false;
         }
+
+
+        const validCenterName = !file.name.split('_').some(item => item == CENTER_NAME);
+        if (validCenterName) {
+            swal({
+                title: CENTER_NAME,
+                text: `Solo archivos permitidos`,
+                icon: "error",
+                dangerMode: true,
+            });
+            return false;
+        }
+
+
+
+       
 
 
 

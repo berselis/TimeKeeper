@@ -173,7 +173,50 @@ namespace TimeKeeper.Controllers
         #endregion
 
 
-        
+        #region LA ROMANA
+        [HttpGet]
+        public async Task<IActionResult> PanelCargaLaRomana(string msj)
+        {
+            PanelCargaDTO panelCarga = new()
+            {
+                Msj = msj,
+                Usuario = "N/A",
+                FechaAplicado = "N/A",
+                FechaActualizado = "N/A",
+                Cargas = new List<RegistroCarga>()
+            };
+
+            if (await context.RegistrosCargas.AnyAsync())
+            {
+                List<RegistroCarga> registroCargas = await context.RegistrosCargas
+                    .AsNoTracking()
+                    .OrderByDescending(ord => ord.FechaAplicado)
+                    .Where(x => x.IdCentro == LaRomana)
+                    .ToListAsync();
+
+                if (registroCargas.Any())
+                {
+                    RegistroCarga last = registroCargas.Last();
+
+                    panelCarga.Usuario = last.NombreUsuario;
+                    panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
+                    panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
+                    panelCarga.Cargas = registroCargas;
+                }
+            }
+
+
+            return View(panelCarga);
+
+        }
+
+
+
+
+        #endregion
+
+
+
 
     }
 }

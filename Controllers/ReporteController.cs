@@ -27,7 +27,7 @@ namespace TimeKeeper.Controllers
             return View(centros);
         }
         [HttpGet]
-        public async Task<IActionResult> HorasRegist()
+        public async Task<IActionResult> HorasTotales()
         {
             List<Centro> centros = await context.Centros
               .AsNoTracking()
