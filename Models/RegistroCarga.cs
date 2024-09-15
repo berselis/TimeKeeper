@@ -15,5 +15,8 @@ namespace TimeKeeper.Models
         public DateTime FechaAplicado { get; set; }
         [Required, MaxLength(100)]
         public string Comentario { get; set; }
+
+        [Required]
+        public int IdCentro { get; set; }
     }
 }

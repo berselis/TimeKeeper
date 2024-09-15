@@ -1,5 +1,4 @@
 ﻿
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +18,8 @@ namespace TimeKeeper.Models
         public bool HasTimeOutOfRange { get; set; }
         [Required]
         public TimeSpan TimeOut { get; set; }
-        public Empleado Empleado { get; set; }
+
+        [ForeignKey("IdEmpleado"), InverseProperty("Tiempos")]
+        public virtual Empleado Empleado { get; set; }
     }
 }

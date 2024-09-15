@@ -14,7 +14,7 @@ namespace TimeKeeper.Controllers
         private readonly UserManager<Usuario> userManager;
         private readonly TimerKeeperDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger,SignInManager<Usuario> signInManager,UserManager<Usuario> userManager,TimerKeeperDbContext context)
+        public HomeController(ILogger<HomeController> logger, SignInManager<Usuario> signInManager, UserManager<Usuario> userManager, TimerKeeperDbContext context)
         {
             _logger = logger;
             this.signInManager = signInManager;
@@ -37,7 +37,15 @@ namespace TimeKeeper.Controllers
         {
             var logIn = await signInManager.PasswordSignInAsync(modelIn.UserName, modelIn.Password, true, false);
             if (logIn.Succeeded == false) return RedirectToAction(nameof(Index), new { msj = "invalid" });
+
             Usuario userLog = await userManager.FindByNameAsync(modelIn.UserName);
+
+            if (userLog.IsActive == false)
+            {
+                await signInManager.SignOutAsync();
+                return RedirectToAction(nameof(Index), new { msj = "invalid" });
+            }
+
             List<Claim> claims = new()
                 {
                     new Claim(ClaimTypes.NameIdentifier, userLog.UserName),
@@ -58,7 +66,5 @@ namespace TimeKeeper.Controllers
         {
             return View();
         }
-
-
     }
 }

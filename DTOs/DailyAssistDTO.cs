@@ -5,6 +5,7 @@ namespace TimeKeeper.DTOs
     public class DailyAssistDTO
     {
         public string Empleado { get; set; }
+        public string Sucursal { get; set; }
         public int IdEmpleado { get; set; }
         public bool HasImg { get; set; }
         public List<Hora> Horas { get; set; }

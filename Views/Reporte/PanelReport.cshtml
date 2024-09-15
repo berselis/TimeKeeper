@@ -2,8 +2,6 @@
     Layout = "_LayoutPanel";
 }
 
-
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <a asp-controller="Home" asp-action="Panel" class="btn btn-outline-secondary">
@@ -13,7 +11,7 @@
 
         <div class="text-center d-flex justify-content-center align-items-center">
             <img src="~/media/img/report128x.png" alt="Clock">
-            <h3 class="display-5"><strong>Reportes de cargas horarias</strong></h3>
+            <h3 class="display-5"><strong>Reportes Cargas Horarias</strong></h3>
         </div>
 
       
@@ -29,14 +27,14 @@
         <div class="col-3 m-2">
             <div class="card" style="width: 18rem;">
                 <img src="~/media/img/morning-routine.png" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Asistencia diaria</h5>
+                <div class="card-body pb-0">
+                    <h4 class="card-title text-center"><strong>Asistencia Diaria</strong></h4>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-grid">
-                        <a href="@Url.Action("DailyAsist","Reporte")" class="btn btn-outline-success">
+                        <a href="@Url.Action("DailyAsist","Reporte")" class="btn btn-outline-success btn-lg">
                             <i class="bi bi-clock-fill"></i>
-                            <span>Ver</span>
+                            <strong>Ver</strong>
                         </a>
                     </li>
                 </ul>
@@ -44,7 +42,7 @@
             </div>
         </div>
 
-        <div class="col-3 m-2">
+    @*    <div class="col-3 m-2">
             <div class="card" style="width: 18rem;">
                 <img src="~/media/img/time-management.png" class="card-img-top">
                 <div class="card-body">
@@ -60,19 +58,19 @@
                 </ul>
 
             </div>
-        </div>
+        </div>*@
 
         <div class="col-3 m-2">
             <div class="card" style="width: 18rem;">
                 <img src="~/media/img/total-hours.png" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Horas registradas</h5>
+                <div class="card-body pb-0">
+                    <h4 class="card-title text-center"><strong>Horas Totales</strong></h4>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item d-grid">
-                        <a href="@Url.Action("HorasRegist","Reporte")" class="btn btn-outline-success">
+                        <a href="@Url.Action("HorasRegist","Reporte")" class="btn btn-outline-success btn-lg">
                             <i class="bi bi-clock-fill"></i>
-                            <span>Ver</span>
+                            <strong>Ver</strong>
                         </a>
                     </li>
                 </ul>

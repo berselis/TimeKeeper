@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1SDt5p+p7ctKLDcYU4VQBGq7cVja9DjFnIZdaftk6Fyc1UM5NSTd3+U3B4s24uinL7Osp4vQ/hn5s1cboR8fbQ==",
+  "dgSpecHash": "fMRAQGe0uk+eJyKErh1rfgJur+qx3C/kulQe73XStBtR3/JoIK23XM+p4gzcjwn8jtcLseFmH39LJazgswz+SQ==",
   "success": true,
-  "projectFilePath": "E:\\GitHUB\\TimeKeeper\\TimeKeeper.csproj",
+  "projectFilePath": "E:\\GitHUB\\3.NETcore\\TimeKeeper\\TimeKeeper.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Belse\\.nuget\\packages\\closedxml\\0.97.0\\closedxml.0.97.0.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",

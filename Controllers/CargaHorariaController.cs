@@ -1,9 +1,6 @@
-﻿using ClosedXML.Excel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Text.RegularExpressions;
 using TimeKeeper.DTOs;
 using TimeKeeper.Funtions;
 using TimeKeeper.Models;
@@ -16,6 +13,10 @@ namespace TimeKeeper.Controllers
 
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly TimerKeeperDbContext context;
+        private const int SPMCentral = 1;
+        private const int BocaChica = 2;
+        private const int LaRomana = 3;
+        private const int PlayaNuevaR = 4;
 
         public CargaHorariaController(IWebHostEnvironment webHostEnvironment, TimerKeeperDbContext context)
         {
@@ -23,7 +24,16 @@ namespace TimeKeeper.Controllers
             this.context = context;
         }
 
-        public async Task<IActionResult> PanelCarga(string msj)
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        #region SPM
+
+        [HttpGet]
+        public async Task<IActionResult> PanelCargaSanPedroCentral(string msj)
         {
 
             PanelCargaDTO panelCarga = new()
@@ -35,27 +45,34 @@ namespace TimeKeeper.Controllers
                 Cargas = new List<RegistroCarga>()
             };
 
-            if(await context.RegistrosCargas.AnyAsync())
+            if (await context.RegistrosCargas.AnyAsync())
             {
-                List<RegistroCarga> registroCargas = await context.RegistrosCargas.ToListAsync();
+                List<RegistroCarga> registroCargas = await context.RegistrosCargas
+                    .AsNoTracking()
+                    .OrderByDescending(ord => ord.FechaAplicado)
+                    .Where(x => x.IdCentro == SPMCentral)
+                    .ToListAsync();
                 RegistroCarga last = registroCargas.Last();
                 panelCarga.Usuario = last.NombreUsuario;
                 panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
                 panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
                 panelCarga.Cargas = registroCargas;
             }
-           
+
+
             return View(panelCarga);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadDataFile(IFormFile fileForm)
+        public async Task<IActionResult> UploadDataFileSanPedroCentral(IFormFile fileForm)
         {
+            using var transaction = context.Database.BeginTransaction();
             try
             {
                 string[] splitName = fileForm.FileName.Split('.');
                 string format = splitName[splitName.Length - 1];
-                if (format != "dat") return RedirectToAction(nameof(PanelCarga), new { msj = "invalidFormat" });
+                if (format != "dat") return RedirectToAction(nameof(PanelCargaSanPedroCentral), new { msj = "invalidFormat" });
+
                 DateTime today = DateTime.Now;
                 string prefix = $"{today.Year}{today.Month}{today.Day}{today.Hour}{today.Minute}{today.Second}_";
                 string root = Path.Combine(webHostEnvironment.WebRootPath, "media", "files");
@@ -64,51 +81,99 @@ namespace TimeKeeper.Controllers
                 await fileForm.CopyToAsync(stream);
                 stream.Close();
 
-
                 StreamReader reader = new(fileRoot);
                 string content = reader.ReadToEnd();
                 reader.Close();
 
 
                 List<Tiempo> timeRegisters = DatFileProces.GetDtoTiempos(content);
-                if (timeRegisters.Count <= 0) return RedirectToAction(nameof(PanelCarga), new { msj = "notTimeRegister" });
+                if (timeRegisters.Count <= 0)
+                {
+                    transaction.Rollback();
+                    return RedirectToAction(nameof(PanelCargaSanPedroCentral), new { msj = "notTimeRegister" });
+                }
 
 
                 int totalReg = timeRegisters.Count;
-
-                if (context.RegistrosCargas.Any())
+                int added = 0;
+                foreach (var item in timeRegisters)
                 {
-                    List<RegistroCarga> registroCargas = await context.RegistrosCargas.ToListAsync();
-                    RegistroCarga last = registroCargas.Last();
-                    timeRegisters = timeRegisters.Where(whe => whe.DateReg > last.FechaRegistro).ToList();
+                    if (!await context.Tiempos.AnyAsync(any => any.IdEmpleado == item.IdEmpleado && any.DateReg == item.DateReg && any.TimeReg == item.TimeReg))
+                    {
+                        context.Tiempos.Add(item);
+                        added++;
+                    }
                 }
-
-                int filterReg = timeRegisters.Count;
-
-                if(filterReg <= 0) return RedirectToAction(nameof(PanelCarga), new { msj = "duplicated" });
-
-                context.Tiempos.AddRange(timeRegisters);
-
 
                 RegistroCarga reg = new()
                 {
                     NombreUsuario = User.Identity.Name,
                     FechaRegistro = timeRegisters.Last().DateReg,
                     FechaAplicado = DateTime.Now,
-                    Comentario = $"{filterReg} de {totalReg} Reg"
+                    Comentario = $"{added} de {totalReg} Reg",
+                    IdCentro = SPMCentral
                 };
 
                 context.RegistrosCargas.Add(reg);
                 await context.SaveChangesAsync();
-                return RedirectToAction(nameof(PanelCarga), new { msj = "success" });
+
+                transaction.Commit();
+                return RedirectToAction(nameof(PanelCargaSanPedroCentral), new { msj = "success" });
 
             }
             catch
             {
-                return RedirectToAction(nameof(PanelCarga), new { msj = "error" });
+                transaction.Rollback();
+                return RedirectToAction(nameof(PanelCargaSanPedroCentral), new { msj = "error" });
+            }
+        }
+
+        #endregion
+
+        #region BOCA CHICA
+        [HttpGet]
+        public async Task<IActionResult> PanelCargaBocaChica(string msj)
+        {
+
+            PanelCargaDTO panelCarga = new()
+            {
+                Msj = msj,
+                Usuario = "N/A",
+                FechaAplicado = "N/A",
+                FechaActualizado = "N/A",
+                Cargas = new List<RegistroCarga>()
+            };
+
+            if (await context.RegistrosCargas.AnyAsync())
+            {
+                List<RegistroCarga> registroCargas = await context.RegistrosCargas
+                    .AsNoTracking()
+                    .OrderByDescending(ord => ord.FechaAplicado)
+                    .Where(x => x.IdCentro == BocaChica)
+                    .ToListAsync();
+
+                if (registroCargas.Any())
+                {
+                    RegistroCarga last = registroCargas.Last();
+
+                    panelCarga.Usuario = last.NombreUsuario;
+                    panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
+                    panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
+                    panelCarga.Cargas = registroCargas;
+                }
             }
 
 
+            return View(panelCarga);
         }
+
+
+
+
+        #endregion
+
+
+        
+
     }
 }

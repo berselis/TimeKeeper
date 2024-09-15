@@ -1,6 +1,7 @@
-﻿@model IEnumerable<TimeKeeper.Models.Empleado>
+﻿@model TimeKeeper.DTOs.Employ.EmpleadoViewListModelDTO
 @{
     Layout = "_LayoutPanel";
+    int row = 1;
 }
 
 <div class="modal fade" id="modalAddEmploy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddUser" aria-hidden="true">
@@ -12,6 +13,7 @@
             </div>
             <div class="modal-body">
                 <div class="card-body p-5 shadow-5">
+                    <img src="~/media/biophoto/face/faceDefault.png" class="rounded mx-auto d-block mb-3 w-25" alt="...">
 
                     <div class="mb-3">
                         <div class="input-group input-group-lg">
@@ -34,20 +36,31 @@
                         </div>
                     </div>
 
+                      <div class="mb-3">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">Sucursal</span>
+                                <select class="form-select form-select-lg mb-3" aria-label="Large select example" name="IdCentro" required>
+                                    <option selected>-Seleccionar-</option>
+                                    @foreach(var item in Model.Centros)
+                                    {
+                                      <option value="@item.IdCentro">@item.Nombre</option>
+                                    }
+                                </select>
+                            </div>
+                       </div>
+
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-save-fill"></i>
-                    <span>Guardar</span>
+                    <strong>Guardar</strong>
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -57,80 +70,98 @@
             <span>Panel principal</span>
         </a>
 
-        <div class="text-center">
+        <h3 class="text-center">Empleados</h3>
 
-            <h5>Empleados</h5>
+        <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <form class="m-3" asp-controller="Empleado" asp-action="Index" method="post" enctype="multipart/form-data">
+
+                    <div class="mb-3">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">Sucursal</span>
+                            <select class="form-select form-select-lg" aria-label="Large select example" id="IdCentro" name="IdCentro" required>
+                                <option selected value="0">TODAS</option>
+                                @foreach (var item in Model.Centros)
+                                {
+                                    <option value="@item.IdCentro">@item.Nombre</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-search"></i>
+                                 <strong>BUSCAR</strong>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="col-md-3 col-sm-3 col-xs-12"></div>
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <button id="btnAddEmploy" class="float-end btn btn-outline-success m-0 btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#modalAddEmploy">
+                    <i class="bi bi-person-fill-add"></i>
+                    <strong>Agregar</strong>
+                </button>
+            </div>
+
         </div>
 
 
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
 
-        <button id="btnAddEmploy" class="float-end btn btn-outline-success mb-4" type="button" data-bs-toggle="modal" data-bs-target="#modalAddEmploy">
-            <i class="bi bi-person-fill-add"></i>
-            <span>Agregar</span>
-        </button>
-
-
         <table id="EmployTable" class="table">
             <thead class="table-dark">
                 <tr>
-                    <th>ID Ponchador</th>
+                    <th>#</th>
                     <th>Face</th>
-                    <th>Empleado</th>
+                    <th>Nombre</th>
                     <th>Puesto</th>
                     <th>Acciones</th>
                 </tr>
 
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Empleados)
                 {
                     string extension = item.IdEmpleado.ToString() + ".jpg";
-                    if (item.HasImg == false) extension = "faceDefault.png";
-
+                    if (!item.HasImg) extension = "faceDefault.png";
 
                     <tr>
-                        <td>
-                            <h2 style="color: #198754;"><strong>@item.IdEmpleado</strong></h2>
-                        </td>
+                        <td><strong>@row</strong></td>
                         <td class="td-face-id">
                             <img src="~/media/biophoto/face/@extension" />
                         </td>
                         <td>
-                            <h3><strong>@item.Nombre</strong></h3>
+                            @if(item.Estado.Equals("ACTIVO")){
+                                <h3 class="m-0"><strong>@item.Nombre</strong></h3>
+
+                            }else{
+                                <h3 class="text-decoration-line-through text-danger m-0"><strong>@item.Nombre</strong></h3>
+                            }
+                            <h5><strong>ID Ponchador:</strong> @item.IdEmpleado</h5>
                         </td>
-                        <td><strong>@item.Departamento</strong></td>
                         <td>
-                            <a class="btn btn-outline-info" asp-controller="Empleado" asp-action="Empleado" asp-route-Id="@item.IdEmpleado">
+                            <h5 class="m-0">@item.Centro.Nombre</h5>
+                            <strong>@item.Departamento</strong>
+
+                           
+
+                        </td>
+                        <td>
+                            <a class="btn btn-light btn-lg" asp-controller="Empleado" asp-action="Empleado" asp-route-Id="@item.IdEmpleado">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
-
-                            <a class="btn btn-outline-danger">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
-
-                            <a class="btn btn-outline-success">
-                                <i class="bi bi-clock-fill"></i>
-                            </a>
-
                         </td>
                     </tr>
+
+                    row++;
                 }
-
             </tbody>
-
         </table>
     </div>
-
-
-
-
 </div>
-
-
-
-
 
 <script type="text/javascript">
     const employtable = document.getElementById('EmployTable');
@@ -142,11 +173,22 @@
             let table = new DataTable(employtable, {
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json'
-                }
+                },
+                ordering: false,
+                lengthMenu: [
+                     [50, 100, 200, -1],
+                    [50, 100, 200, 'All']
+                ]
             });
         }
 
         MostrarMensaje();
+
+
+        const idCentro = parseInt('@ViewBag.Sucursal');
+        const selector = document.getElementById('IdCentro');
+        selector.selectedIndex = idCentro;
+
 
     });
 
@@ -157,25 +199,27 @@
   
         switch (msj) {
             case "edited":
-                ShowDialog('Editado!!');
+                ShowDialog('Editado!!', 'success');
                 break;
             case "added":
-                ShowDialog('Agregado!!');
+                ShowDialog('Agregado!!', 'success');
+                break;
+            case "duplicated":
+                ShowDialog('ID Ponchador Duplicado!!', 'error');
                 break;
             default:
                 return;
         }
 
 
-        function ShowDialog(text) {
+        function ShowDialog(title, icon) {
             swal({
-                title: text,
+                title,
                 text: "Información del empleado",
-                icon: "success"
+                icon
             });
         }
     }
 
 
 </script>
-

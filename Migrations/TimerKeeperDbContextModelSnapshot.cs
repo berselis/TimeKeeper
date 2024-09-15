@@ -226,6 +226,24 @@ namespace TimeKeeper.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TimeKeeper.Models.Centro", b =>
+                {
+                    b.Property<int>("IdCentro")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCentro"), 1L, 1);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("IdCentro");
+
+                    b.ToTable("Centros");
+                });
+
             modelBuilder.Entity("TimeKeeper.Models.Empleado", b =>
                 {
                     b.Property<int>("IdEmpleado")
@@ -247,12 +265,17 @@ namespace TimeKeeper.Migrations
                     b.Property<bool>("HasImg")
                         .HasColumnType("bit");
 
+                    b.Property<int>("IdCentro")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("IdEmpleado");
+
+                    b.HasIndex("IdCentro");
 
                     b.ToTable("Empleados");
                 });
@@ -297,9 +320,6 @@ namespace TimeKeeper.Migrations
                     b.Property<DateTime>("DateReg")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EmpleadoIdEmpleado")
-                        .HasColumnType("int");
-
                     b.Property<bool>("HasTimeOutOfRange")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -318,7 +338,7 @@ namespace TimeKeeper.Migrations
 
                     b.HasKey("IdTime");
 
-                    b.HasIndex("EmpleadoIdEmpleado");
+                    b.HasIndex("IdEmpleado");
 
                     b.ToTable("Tiempos");
                 });
@@ -326,6 +346,9 @@ namespace TimeKeeper.Migrations
             modelBuilder.Entity("TimeKeeper.Models.Usuario", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -340,7 +363,7 @@ namespace TimeKeeper.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -349,7 +372,7 @@ namespace TimeKeeper.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -358,7 +381,7 @@ namespace TimeKeeper.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -367,13 +390,13 @@ namespace TimeKeeper.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -382,17 +405,35 @@ namespace TimeKeeper.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TimeKeeper.Models.Empleado", b =>
+                {
+                    b.HasOne("TimeKeeper.Models.Centro", "Centro")
+                        .WithMany("Empleados")
+                        .HasForeignKey("IdCentro")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Centro");
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.Tiempo", b =>
                 {
                     b.HasOne("TimeKeeper.Models.Empleado", "Empleado")
                         .WithMany("Tiempos")
-                        .HasForeignKey("EmpleadoIdEmpleado");
+                        .HasForeignKey("IdEmpleado")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Empleado");
+                });
+
+            modelBuilder.Entity("TimeKeeper.Models.Centro", b =>
+                {
+                    b.Navigation("Empleados");
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.Empleado", b =>

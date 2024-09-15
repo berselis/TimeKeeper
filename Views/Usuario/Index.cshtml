@@ -89,15 +89,15 @@
                     <tr>
                         <td>@item.UserName</td>
                         <td>@item.RoleName</td>
-                        <td>-</td>
+                        <td>@(item.IsActive ? "Activo" : "Desactivado")</td>
                         <td>
-                            <a class="btn btn-outline-info" asp-controller="Usuario" asp-action="Empleado" asp-route-Id="@item.Id">
+                         @*   <a class="btn btn-outline-info" asp-controller="Usuario" asp-action="Empleado" asp-route-Id="@item.Id">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
 
                             <a class="btn btn-outline-danger">
                                 <i class="bi bi-trash-fill"></i>
-                            </a>
+                            </a>*@
 
                         </td>
                     </tr>

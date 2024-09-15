@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<TimeKeeper.Models.Centro>
+@{
     Layout = "_LayoutPanel";
     string theDay = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 }
@@ -13,40 +14,48 @@
 
         <div class="text-center">
 
-            <h5 class="display-5"><strong>Asistencia daria</strong></h5>
+            <h5 class="display-5"><strong>Asistencia Diaria</strong></h5>
         </div>
 
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="row">
            
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                <label for="FechaIni" class="form-label">
-                    <strong>Fecha</strong>
-                </label>
-                <div class="input-group mb-3">
-                   
-                    <input type="date" class="form-control" id="FechaIni" value="@theDay">
-                    <button onclick="FindData()" class="btn btn-outline-primary" type="button">
+            <div class="col-md-8 col-sm-8 col-xs-12">
+                <div class="input-group input-group-lg my-3">
+
+                    <span class="input-group-text">Sucursal</span>
+                    <select class="form-select form-select-lg" aria-label="Large select example" id="IdCentro" name="IdCentro" required>
+                        <option selected value="0">TODAS</option>
+                        @foreach (var item in Model)
+                        {
+                            <option value="@item.IdCentro">@item.Nombre</option>
+                        }
+                    </select>
+
+
+
+
+                   <span class="input-group-text">Fecha</span>
+                    <input type="date" class="form-control form-control-lg" id="FechaIni" value="@theDay">
+                    <button onclick="FindData()" class="btn btn-success" type="button">
                         <i class="bi bi-search"></i>
-                        <span>Buscar</span>
+                        <strong>Buscar</strong>
                     </button>
                 </div>
                
             </div>
 
-            <div class="col-md-8 col-sm-8 col-xs-12">
-                <div class="btn-group float-end mt-4" role="group">
-                    <button type="button" onclick="ExcelExport()" class="btn btn-outline-success">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="btn-group float-end my-3" role="group">
+                    <button type="button" onclick="ExcelExport()" class="btn btn-outline-success btn-lg">
                         <i class="bi bi-file-earmark-excel-fill"></i>
                         <span>Descargar Excel</span>
                     </button>
-                    <a href="#" class="btn btn-outline-success">
+                   @* <a href="#" class="btn btn-outline-success">
                         <i class="bi bi-printer-fill"></i>
                         <span>Imprimir</span>
-                    </a>
-
-
+                    </a>*@
                 </div>
             </div>
 
@@ -76,11 +85,12 @@
                 </div>
 
 
-                <table id="EmployTable" class="table">
+                <table id="EmployTable" class="table table-hover table-sm">
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
                             <th>Empleados</th>
+                            <th>Sucursal</th>
                             <th>Horas</th>
                             <th>Cantidad</th>
                             <th>Total horas</th>
@@ -101,6 +111,7 @@
 
 <script type="text/javascript">
     
+    const centro = document.getElementById('IdCentro');
     const fechaIni = document.getElementById('FechaIni');
     const dotSpin = document.getElementById('DotSpin');
     const tablaEmploy = document.getElementById('EmployTable');
@@ -111,7 +122,7 @@
         if(fechaIni.value == ''){
             swal({
                 title: 'Debe selecionar una fecha',
-                text: "Paramtros",
+                text: "Parametros",
                 icon: 'warning'
             });
             return false;
@@ -130,72 +141,72 @@
                     method: "POST",
                     url: url,
                     type: "application/json",
-                    data: { dateFirst: fechaIni.value },
-                    success: (query) => {
+                    data: { dateFirst: fechaIni.value, centroId: centro.selectedIndex },
+                    success: (response) => {
+                        const {status, query} = response;
 
-                        if (query.length > 0) {
-                            let index = 1;
+                        if(status){
+                            if (query.length > 0) {
+                                let index = 1;
 
-                            query.forEach(row =>{
+                                query.forEach(row => {
 
+                                    const tr = document.createElement('tr');
+
+                                    const numb = document.createElement('td');
+                                    numb.innerText = index;
+                                    tr.appendChild(numb);
+
+                                    index++;
+
+                                    const empl = document.createElement('td');
+                                    empl.innerText = row.empleado;
+                                    tr.appendChild(empl);
+
+                                    const centr = document.createElement('td');
+                                    centr.innerText = row.sucursal;
+                                    tr.appendChild(centr);
+
+                                    const hors = document.createElement('td');
+                                    const list = document.createElement('ul');
+                                    list.className = 'list-group list-group-flush';
+                                    row.horas.forEach(t => {
+                                        const li = document.createElement('li');
+                                        li.className = 'list-group-item';
+
+                                        const spanReg = document.createElement('span');
+                                        spanReg.innerText = t.horaReg;
+                                        li.appendChild(spanReg);
+
+                                        if (t.hasTimeOutOfRange) {
+                                            li.classList.add('text-danger');
+                                            const spanOut = document.createElement('span');
+                                            spanOut.innerText = ` => ${t.timeOutOfRange}`;
+                                            li.appendChild(spanOut);
+                                        }
+                                        list.appendChild(li);
+                                    })
+
+                                    hors.appendChild(list);
+                                    tr.appendChild(hors);
+
+                                    const cant = document.createElement('td');
+                                    cant.innerText = row.cantRegistros;
+                                    tr.appendChild(cant);
+
+                                    const totalH = document.createElement('td');
+                                    totalH.innerText = row.totalHora;
+                                    tr.appendChild(totalH);
+
+                                    body.appendChild(tr);
+
+                                });
+
+                            } else {
                                 const tr = document.createElement('tr');
-
-                                const numb = document.createElement('td');
-                                numb.innerText = index;
-                                tr.appendChild(numb);
-
-                                index++;
-
-                                const empl = document.createElement('td');
-                                empl.innerText = row.empleado;
-                                tr.appendChild(empl);
-
-                                const hors = document.createElement('td');
-                                const list = document.createElement('ul');
-                                list.className = 'list-group list-group-flush';
-                                row.horas.forEach(t => {
-                                    const li = document.createElement('li');
-                                    li.className = 'list-group-item';
-
-                                    const spanReg = document.createElement('span');
-                                    spanReg.innerText = t.horaReg;
-                                    li.appendChild(spanReg);
-
-                                    if(t.hasTimeOutOfRange){
-                                        li.classList.add('text-danger');
-                                        const spanOut = document.createElement('span');
-                                        spanOut.innerText = ` => ${t.timeOutOfRange}`;
-                                        li.appendChild(spanOut);
-                                    }
-                                   
-
-
-
-
-
-                                    list.appendChild(li);
-                                })
-
-                                hors.appendChild(list);
-                                tr.appendChild(hors);
-
-                                const cant = document.createElement('td');
-                                cant.innerText = row.cantRegistros;
-                                tr.appendChild(cant);
-
-                                const totalH = document.createElement('td');
-                                totalH.innerText = row.totalHora;
-                                tr.appendChild(totalH);
-
+                                $(tr).append('<td colspan="6"><h4 class="text-center text-danger"><strong>No hay registros!!!</strong></h4></td>');
                                 body.appendChild(tr);
-                                
-                            });
-
-                        } else {
-                            const tr = document.createElement('tr');
-                            $(tr).append('<td colspan="5"><h4 class="text-center text-danger"><strong>No hay registros!!!</strong></h4></td>');
-
-                            body.appendChild(tr);
+                            }
                         }
 
                         $(dotSpin).fadeOut(100);
@@ -203,6 +214,8 @@
                     },
                     error: (error) => {
                         console.log(error);
+
+                        $(dotSpin).fadeOut(100);
                     }
                 });
             });

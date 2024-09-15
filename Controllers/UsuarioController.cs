@@ -25,19 +25,17 @@ namespace TimeKeeper.Controllers
                 Id = sel.Id,
                 UserName = sel.UserName,
                 RoleName = sel.RoleName,
+                IsActive = sel.IsActive
 
             }).ToListAsync();
             ViewBag.Msj = msj;
             return View(usuario);
-
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Usuario(Usuario model)
         {
             Usuario usuario = await _context.Usuarios.FindAsync(model.Id);
-
-
             return RedirectToAction("Index", new { msj = "editado" });
         }
 
@@ -48,17 +46,14 @@ namespace TimeKeeper.Controllers
             {
                 UserName = model.UserName,
                 RoleName = model.RoleName ?? "Agente",
+                IsActive = true
             };
-
 
             IdentityResult result = await userManager.CreateAsync(usuario, model.Password);
 
             if (result.Succeeded) return RedirectToAction("Index", new { msj = "creado" });
 
-
             return RedirectToAction("Index", new { msj = result.Errors });
         }
-
-
     }
 }

@@ -1,10 +1,9 @@
-﻿@model TimeKeeper.Models.Empleado
+﻿@model TimeKeeper.DTOs.Employ.EmpleadoViewModelDTO
 @{
     Layout = "_LayoutPanel";
-    string extension = Model.IdEmpleado.ToString() + ".jpg";
-    if (Model.HasImg == false) extension = "faceDefault.png";
+    string extension = Model.Empleado.IdEmpleado.ToString() + ".jpg";
+    if (Model.Empleado.HasImg == false) extension = "faceDefault.png";
 }
-
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -16,35 +15,68 @@
 
         <div class="text-center">
 
-            <h3><strong>@Model.Nombre</strong></h3>
+            <h3><strong>@Model.Empleado.Nombre</strong></h3>
         </div>
 
 
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <img src="~/media/biophoto/face/@extension" class="rounded mx-auto d-block" alt="...">
+        <img src="~/media/biophoto/face/@extension" class="rounded mx-auto d-block mb-3" alt="...">
 
         <form class="d-grid gap-2 col-6 mx-auto" asp-controller="Empleado" asp-action="EditarEmpleado" method="post" enctype="multipart/form-data">
+
             <div class="mb-3">
                 <div class="input-group input-group-lg">
-                    <span class="input-group-text" >ID Ponchador</span>
-                    <input type="text" class="form-control" name="IdEmpleado" required value="@Model.IdEmpleado" readonly>
+                    <span class="input-group-text">Sucursal</span>
+                    <select class="form-select form-select-lg" aria-label="Large select example" name="IdCentro" required>
+                        <option selected value="@Model.Empleado.Centro.IdCentro">@Model.Empleado.Centro.Nombre</option>
+                        @foreach (var item in Model.Centros)
+                        {
+                            <option value="@item.IdCentro">@item.Nombre</option>
+                        }
+
+                    </select>
                 </div>
             </div>
 
             <div class="mb-3">
                 <div class="input-group input-group-lg">
+                    <span class="input-group-text" >ID Ponchador</span>
+                    <input type="text" class="form-control" name="IdEmpleado" required value="@Model.Empleado.IdEmpleado" readonly>
+                </div>
+            </div>
+
+            <div class="mb-3">
+
+                <h5><strong>ESTADO</strong></h5>
+                <div class="form-check form-switch mb-4">
+                    @if(Model.Empleado.Estado.Equals("ACTIVO")){
+                        <input onclick="changeStatus(this)" class="form-check-input" type="checkbox"  name="Estado"  checked />
+                        <label class="form-check-label">ACTIVO</label>
+
+                    }else{
+                        <input onclick="changeStatus(this)" class="form-check-input" type="checkbox" name="Estado" />
+                        <label class="form-check-label">CANCELADO/A</label>
+                    }
+                   
+                </div>
+            
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group input-group-lg">
                     <span class="input-group-text">Nombre</span>
-                    <input type="text" class="form-control" name="Nombre" required value="@Model.Nombre">
+                    <input type="text" class="form-control" name="Nombre" required value="@Model.Empleado.Nombre">
                 </div>
             </div>
 
             <div class="mb-3">
                 <div class="input-group input-group-lg">
                     <span class="input-group-text">Departamento</span>
-                    <input type="text" class="form-control" name="Departamento" required value="@Model.Departamento">
+                    <input type="text" class="form-control" name="Departamento" required value="@Model.Empleado.Departamento">
                 </div>
             </div>
+          
 
             <div class="mb-3">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -54,7 +86,21 @@
                     </button>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
+
+
+<script type="text/javascript">
+
+
+function changeStatus(el){
+
+        const result = el.checked ? "ACTIVO" : "CANCELADO/A";
+        const label = el.nextElementSibling;
+        label.innerText = result;
+        el.value = result;
+    
+}
+
+</script>

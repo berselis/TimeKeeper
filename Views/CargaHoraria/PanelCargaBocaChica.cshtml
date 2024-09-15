@@ -1,30 +1,32 @@
 ﻿@model TimeKeeper.DTOs.PanelCargaDTO
 @{
     Layout = "_LayoutPanel";
+    string fileName = "Records_MICHELINEBOCACHICA_";
 }
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
 
-        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+        <a asp-controller="CargaHoraria" asp-action="Index" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-90deg-left"></i>
-            <span>Panel principal</span>
+            <span>Panel Centros</span>
         </a>
 
         <div class="text-center">
-
-            <h3><strong>Cargar archivo ponchador</strong></h3>
+            <h3>Cargar Ponchador</h3>
+            <h3><strong>Boca Chica</strong></h3>
         </div>
 
 
     </div>
+    
     <div class="col-md-12 col-sm-12 col-xs-12">
-
         <div class="col-md-12 col-sm-12 col-xs-12 upload-body">
-            <form class="wrapper" asp-controller="CargaHoraria" asp-action="UploadDataFile" method="post" enctype="multipart/form-data">
+            <form class="wrapper" asp-controller="CargaHoraria" asp-action="UploadDataFileSanPedroCentral" method="post" enctype="multipart/form-data">
                 <div id="FormUploadExcel" class="form-upload-excel">
                     <input type="file" id="ExcelFile" hidden="hidden" name="fileForm" />
                     <i class="bi bi-file-earmark-ruled"></i>
+                    <p><small><i>@fileName</i></small></p>
                 </div>
                 <section id="ProgressArea" class="progress-area"></section>
                 <section id="UploadArea" class="uploaded-area"></section>
@@ -89,6 +91,7 @@
 </div>
 
 <script type="text/javascript">
+    const FILE_NAME = '@fileName';
     const form = document.getElementById('FormUploadExcel');
     const excelfileInput = document.getElementById('ExcelFile');
     const progresArea = document.getElementById('ProgressArea');
@@ -96,20 +99,23 @@
     const cargaTable = document.getElementById('TablaCarga');
     const rows = cargaTable.lastElementChild.childElementCount;
 
-
     document.addEventListener('DOMContentLoaded', () => {
         if (rows > 1) {
             let table = new DataTable(cargaTable, {
                 language: {
                     url: 'https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json'
-                }
+                },
+                ordering: false,
+                lengthMenu: [
+                    [10, 25, 50, 100, 200, -1],
+                    [10, 25, 50, 100, 200, 'All']
+                ]
             });
         }
 
         MostrarMensaje();
 
     });
-
 
     function MostrarMensaje() {
         const msj = '@Model.Msj';
@@ -142,9 +148,6 @@
         }
     }
 
-
-
-
     form.addEventListener('click', (e) => {
         excelfileInput.click();
     });
@@ -158,15 +161,17 @@
         }
     }
 
-
     function ValidateFile(file) {
 
-        const format = file.name.split('.').find(item => item === 'dat');
+        const format = file.name.split('.').find(item => item === 'xls');
 
-        if (format != 'dat') {
+        console.log(file.name.split('.'));
+
+        if (format != 'xls') {
             swal({
-                title: '.DAT',
-                text: "Solo archivos permitidos",
+                title: '.XLS',
+                text:'',
+                content: `<p>Solo archivos permitidos</p> <strong>${FILE_NAME}</strong>`,
                 icon: "error"
             });
             return false;
@@ -200,21 +205,21 @@
             if (fileLoadedPercent >= 100) fileLoadedPercent = 100;
             uploadArea.innerHTML = '';
             let progressHTML = `
-                                            <ul>
-                                            <li>
-                                                <i class="icofont icofont-file-excel"></i>
-                                                <div class="content">
-                                                    <div class="details">
-                                                        <span class="name">${fileName} ● Load</span>
-                                                        <span class="percent">${fileLoadedPercent}%</span>
+                                                <ul>
+                                                <li>
+                                                    <i class="icofont icofont-file-excel"></i>
+                                                    <div class="content">
+                                                        <div class="details">
+                                                            <span class="name">${fileName} ● Load</span>
+                                                            <span class="percent">${fileLoadedPercent}%</span>
+                                                        </div>
+                                                        <div class="progress-bar-excel">
+                                                            <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
+                                                        </div>
                                                     </div>
-                                                    <div class="progress-bar-excel">
-                                                        <div class="progress-excel" style="width:${fileLoadedPercent}%;"></div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            </ul>
-                                            `;
+                                                </li>
+                                                </ul>
+                                                `;
 
             progresArea.innerHTML = progressHTML;
 
@@ -223,23 +228,23 @@
                 $(progresArea).fadeOut(150, function () {
                     progresArea.innerHTML = '';
                     let doneHTML = `
-                                                <ul>
-                                                    <li>
-                                                        <i class="icofont icofont-file-excel"></i>
-                                                        <div class="content">
-                                                            <div class="details">
-                                                                <span class="name">${file.name}</span>
-                                                                <span class="size">${fileSize}</span>
+                                                    <ul>
+                                                        <li>
+                                                            <i class="icofont icofont-file-excel"></i>
+                                                            <div class="content">
+                                                                <div class="details">
+                                                                    <span class="name">${file.name}</span>
+                                                                    <span class="size">${fileSize}</span>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-outline-success btn-sm">
-                                                            <i class="bi bi-file-arrow-up-fill"></i>
-                                                            <strong>Cargar</strong>
-                                                        </button>
-                                                        <i onclick="RemoveFile(this)" class="bi bi-x-circle-fill remove-file"></i>
-                                                    </li>
-                                                </ul>
-                                                `;
+                                                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                                                <i class="bi bi-file-arrow-up-fill"></i>
+                                                                <strong>Cargar</strong>
+                                                            </button>
+                                                            <i onclick="RemoveFile(this)" class="bi bi-x-circle-fill remove-file"></i>
+                                                        </li>
+                                                    </ul>
+                                                    `;
                     uploadArea.innerHTML = doneHTML;
                 })
 

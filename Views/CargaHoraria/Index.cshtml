@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "_LayoutPanel";
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <a asp-controller="Home" asp-action="Panel" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-90deg-left"></i>
+            <span>Panel Principal</span>
+        </a>
+
+        <div class="text-center d-flex justify-content-center align-items-center">
+            <img src="~/media/img/central-tower.png" alt="tower" class="img-thumbnail" style="max-width:64px;">
+            <h3 class="display-5"><strong>Carga Horaria - Centros</strong></h3>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <hr />
+    </div>
+
+
+    <div class="col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">
+
+        <div class="col-3 m-2">
+            <div class="card" style="width: 18rem;">
+                <img src="~/media/img/store-time.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-center">San Pedro Macoris (Central) </h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-grid">
+                        <a href="@Url.Action("PanelCargaSanPedroCentral","CargaHoraria")" class="btn btn-outline-dark btn-lg">
+                            <i class="bi bi-cursor-fill"></i>
+                            <span>CARGAR</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="col-3 m-2">
+            <div class="card" style="width: 18rem;">
+                <img src="~/media/img/store-time.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Boca Chica</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-grid">
+                        <a href="@Url.Action("PanelCargaBocaChica","CargaHoraria")" class="btn btn-outline-dark btn-lg">
+                            <i class="bi bi-cursor-fill"></i>
+                            <span>CARGAR</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="col-3 m-2">
+            <div class="card" style="width: 18rem;">
+                <img src="~/media/img/store-time.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-center">La Romana</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-grid">
+                        <a href="" class="btn btn-outline-dark btn-lg">
+                            <i class="bi bi-cursor-fill"></i>
+                            <span>CARGAR</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="col-3 m-2">
+            <div class="card" style="width: 18rem;">
+                <img src="~/media/img/store-time.png" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Playa Nueva Romana</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-grid">
+                        <a href="" class="btn btn-outline-dark btn-lg">
+                            <i class="bi bi-cursor-fill"></i>
+                            <span>CARGAR</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>

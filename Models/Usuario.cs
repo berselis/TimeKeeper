@@ -10,6 +10,7 @@ namespace TimeKeeper.Models
     {
         [Required, MaxLength(20)]
         public string RoleName { get; set; }
+        public bool IsActive { get; set; }
     }
 
 

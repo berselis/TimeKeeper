@@ -36,6 +36,7 @@ namespace TimeKeeper.Funtions
                 DailyAssistDTO dto = new()
                 {
                     Empleado = empleado.Nombre,
+                    Sucursal = empleado.Centro.Nombre,
                     IdEmpleado = empleado.IdEmpleado,
                     HasImg = empleado.HasImg,
                     Horas = timeFilter.Select(sel => new Hora
@@ -71,13 +72,16 @@ namespace TimeKeeper.Funtions
                     totalHours += time;
                 });
 
+                int hours = (totalHours.Days * 24) + totalHours.Hours;
 
                 TotalHourDTO dto = new()
                 {
                     Number = number,
                     Empleado = empleado.Nombre,
-
-                    TotalHora = $"{totalHours.Days * 24 + totalHours.Hours}h:{totalHours.Minutes}m"
+                    Sucursal = empleado.Centro.Nombre,
+                    TotalHora = $"{hours}h:{totalHours.Minutes}m",
+                    Hora = hours,
+                    Minuto = totalHours.Minutes
                 };
                 if (timeFilter.Count > 0)
                 {
@@ -122,6 +126,5 @@ namespace TimeKeeper.Funtions
             }
             return sumTimes;
         }
-
     }
 }
