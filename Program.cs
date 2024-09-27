@@ -1,3 +1,4 @@
+using FileSignatures;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,8 @@ builder.Services.AddIdentity<Usuario, IdentityRole>(option =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<TimerKeeperDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddSingleton<IFileFormatInspector>(new FileFormatInspector());
 
 builder.Services.AddAuthorization(options =>
     {

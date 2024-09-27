@@ -552,3 +552,5 @@ E:\GitHUB\3.NETcore\TimeKeeper\obj\Debug\net6.0\refint\TimeKeeper.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Debug\net6.0\TimeKeeper.pdb
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Debug\net6.0\TimeKeeper.genruntimeconfig.cache
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Debug\net6.0\ref\TimeKeeper.dll
+E:\GitHUB\3.NETcore\TimeKeeper\bin\Debug\net6.0\FileSignatures.dll
+E:\GitHUB\3.NETcore\TimeKeeper\bin\Debug\net6.0\OpenMcdf.dll

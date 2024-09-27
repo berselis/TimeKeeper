@@ -54,6 +54,20 @@
           }
         }
       },
+      "FileSignatures/5.1.0": {
+        "type": "package",
+        "dependencies": {
+          "OpenMcdf": "2.3.1",
+          "System.Reflection.TypeExtensions": "4.3.0",
+          "System.Runtime": "4.3.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/FileSignatures.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/FileSignatures.dll": {}
+        }
+      },
       "Humanizer.Core/2.8.26": {
         "type": "package",
         "compile": {
@@ -1974,6 +1988,19 @@
           }
         }
       },
+      "OpenMcdf/2.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/OpenMcdf.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/OpenMcdf.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -3768,6 +3795,18 @@
         "lib/netstandard1.0/ExcelNumberFormat.xml",
         "lib/netstandard2.0/ExcelNumberFormat.dll",
         "lib/netstandard2.0/ExcelNumberFormat.xml"
+      ]
+    },
+    "FileSignatures/5.1.0": {
+      "sha512": "MnPzAuQnz9jm92MCcprmox1EdvGUkNOaBQMMyaZDZfP8633AeuhAmHKPArM+33BZTwYvWjHQPNK8Bk+n9t0L/Q==",
+      "type": "package",
+      "path": "filesignatures/5.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "filesignatures.5.1.0.nupkg.sha512",
+        "filesignatures.nuspec",
+        "lib/netstandard2.0/FileSignatures.dll"
       ]
     },
     "Humanizer.Core/2.8.26": {
@@ -6309,6 +6348,23 @@
         "lib/netstandard2.0/NuGet.Versioning.xml",
         "nuget.versioning.6.3.1.nupkg.sha512",
         "nuget.versioning.nuspec"
+      ]
+    },
+    "OpenMcdf/2.3.1": {
+      "sha512": "2Otbtp5FsIkdtWn4904oftoyOigllM/Auz2V7qIpxNaK+MC1C2ENjNXL3/ZdKWFLOs24/Bi/lYOE254C7s3Pgw==",
+      "type": "package",
+      "path": "openmcdf/2.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net40/OpenMcdf.dll",
+        "lib/net40/OpenMcdf.xml",
+        "lib/netstandard2.0/OpenMcdf.dll",
+        "lib/netstandard2.0/OpenMcdf.xml",
+        "openmcdf.2.3.1.nupkg.sha512",
+        "openmcdf.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -10362,6 +10418,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "ClosedXML >= 0.97.0",
+      "FileSignatures >= 5.1.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 6.0.11",
       "Microsoft.EntityFrameworkCore >= 6.0.11",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.11",
@@ -10419,6 +10476,10 @@
           "ClosedXML": {
             "target": "Package",
             "version": "[0.97.0, )"
+          },
+          "FileSignatures": {
+            "target": "Package",
+            "version": "[5.1.0, )"
           },
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",

@@ -22,9 +22,9 @@
 
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="col-md-12 col-sm-12 col-xs-12 upload-body">
-            <form class="wrapper" asp-controller="CargaHoraria" asp-action="#" method="post" enctype="multipart/form-data">
+            <form id="formFile" class="wrapper" asp-controller="CargaHoraria" asp-action="UploadDataFileLaRomana" method="post" enctype="multipart/form-data">
                 <div id="FormUploadExcel" class="form-upload-excel">
-                    <input type="file" id="ExcelFile" hidden="hidden" name="fileForm" />
+                    <input type="file" id="ExcelFile" hidden="hidden" name="file" />
                     <i class="bi bi-file-earmark-ruled"></i>
                     <p><small><i>@fileName</i></small></p>
                 </div>
@@ -93,7 +93,8 @@
 <script type="text/javascript">
     const CENTER_NAME = 'MICHELINLAROMANA';
     const FILE_NAME = '@fileName';
-    const form = document.getElementById('FormUploadExcel');
+    const form = document.getElementById('formFile');
+    const divUploadExcel = document.getElementById('FormUploadExcel');
     const excelfileInput = document.getElementById('ExcelFile');
     const progresArea = document.getElementById('ProgressArea');
     const uploadArea = document.getElementById('UploadArea');
@@ -118,38 +119,17 @@
 
     });
 
-    function MostrarMensaje() {
-        const msj = '@Model.Msj';
+    form.addEventListener('submit', (e) => {
 
+        const button = e.submitter;
+        button.disabled = true;
+        button.innerHTML = ' <div style="margin:12px 44px" class="spinner-border spinner-border-sm"></div>'
 
-        switch (msj) {
-            case "error":
-                ShowDialog('Error file', 'error');
-                break;
-            case "success":
-                ShowDialog('Cargado', 'success');
-                break;
-            case "invalidFormat":
-                ShowDialog('Formato de archivo inválido', 'warning');
-            case "notTimeRegister":
-                ShowDialog('No hay registros', 'warning');
-            case "duplicated":
-                ShowDialog('Registros duplicado', 'warning');
-            default:
-                return;
-        }
+        button.nextElementSibling.remove();
+        divUploadExcel.style.pointerEvents = 'none';
+    });
 
-
-        function ShowDialog(text, typeIcon) {
-            swal({
-                title: text,
-                text: "Archivo ponchador",
-                icon: typeIcon
-            });
-        }
-    }
-
-    form.addEventListener('click', (e) => {
+    divUploadExcel.addEventListener('click', (e) => {
         excelfileInput.click();
     });
 
@@ -164,11 +144,11 @@
 
     function ValidateFile(file) {
         const fileName = file.name.split('.');
-        const extentions = file.name.split('.').find(item => item === 'xls');
+        const extentions = file.name.split('.').find(item => item === 'csv');
 
-        if (extentions != 'xls') {
+        if (extentions != 'csv') {
             swal({
-                title: '.XLS',
+                title: '.CSV',
                 text: `Solo archivos permitidos ${FILE_NAME}`,
                 icon: "error",
                 dangerMode: true,
@@ -269,6 +249,37 @@
             excelfileInput.value = null;
         });
 
+    }
+
+    function MostrarMensaje() {
+        const msj = '@Model.Msj';
+
+
+        switch (msj) {
+            case "error":
+                ShowDialog('Error file', 'error');
+                break;
+            case "success":
+                ShowDialog('Cargado', 'success');
+                break;
+            case "invalidFormat":
+                ShowDialog('Formato de archivo inválido', 'warning');
+            case "notTimeRegister":
+                ShowDialog('No hay registros', 'warning');
+            case "duplicated":
+                ShowDialog('Registros duplicado', 'warning');
+            default:
+                return;
+        }
+
+
+        function ShowDialog(text, typeIcon) {
+            swal({
+                title: text,
+                text: "Archivo ponchador",
+                icon: typeIcon
+            });
+        }
     }
 
 </script>

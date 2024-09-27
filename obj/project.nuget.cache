@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "fMRAQGe0uk+eJyKErh1rfgJur+qx3C/kulQe73XStBtR3/JoIK23XM+p4gzcjwn8jtcLseFmH39LJazgswz+SQ==",
+  "dgSpecHash": "fbOSDt4v/IiFXh8r1gpaL3RFD/KrAVmtu1RzjXFmqkwV8HdYnRDgx6b+nXJXpQs/9QdG1GqrBoSXTIYSnwI9IA==",
   "success": true,
   "projectFilePath": "E:\\GitHUB\\3.NETcore\\TimeKeeper\\TimeKeeper.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Belse\\.nuget\\packages\\closedxml\\0.97.0\\closedxml.0.97.0.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\excelnumberformat\\1.1.0\\excelnumberformat.1.1.0.nupkg.sha512",
+    "C:\\Users\\Belse\\.nuget\\packages\\filesignatures\\5.1.0\\filesignatures.5.1.0.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\irony.netcore\\1.0.11\\irony.netcore.1.0.11.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
@@ -88,6 +89,7 @@
     "C:\\Users\\Belse\\.nuget\\packages\\nuget.projectmodel\\6.3.1\\nuget.projectmodel.6.3.1.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\nuget.protocol\\6.3.1\\nuget.protocol.6.3.1.nupkg.sha512",
     "C:\\Users\\Belse\\.nuget\\packages\\nuget.versioning\\6.3.1\\nuget.versioning.6.3.1.nupkg.sha512",
+    "C:\\Users\\Belse\\.nuget\\packages\\openmcdf\\2.3.1\\openmcdf.2.3.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

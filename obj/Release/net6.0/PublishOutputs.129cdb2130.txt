@@ -7,6 +7,7 @@ E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\TimeKeeper.pdb
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\ClosedXML.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\DocumentFormat.OpenXml.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\ExcelNumberFormat.dll
+E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\FileSignatures.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\Humanizer.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\Irony.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\MessagePack.dll
@@ -69,6 +70,7 @@ E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\NuGet.Packaging.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\NuGet.ProjectModel.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\NuGet.Protocol.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\NuGet.Versioning.dll
+E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\OpenMcdf.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\SixLabors.Fonts.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\System.Composition.AttributedModel.dll
 E:\GitHUB\3.NETcore\TimeKeeper\obj\Release\net6.0\PubTmp\Out\System.Composition.Convention.dll

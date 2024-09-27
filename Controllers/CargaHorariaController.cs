@@ -35,7 +35,6 @@ namespace TimeKeeper.Controllers
         [HttpGet]
         public async Task<IActionResult> PanelCargaSanPedroCentral(string msj)
         {
-
             PanelCargaDTO panelCarga = new()
             {
                 Msj = msj,
@@ -52,13 +51,16 @@ namespace TimeKeeper.Controllers
                     .OrderByDescending(ord => ord.FechaAplicado)
                     .Where(x => x.IdCentro == SPMCentral)
                     .ToListAsync();
-                RegistroCarga last = registroCargas.Last();
-                panelCarga.Usuario = last.NombreUsuario;
-                panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
-                panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
-                panelCarga.Cargas = registroCargas;
-            }
 
+                if (registroCargas.Any())
+                {
+                    RegistroCarga last = registroCargas.First();
+                    panelCarga.Usuario = last.NombreUsuario;
+                    panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
+                    panelCarga.FechaActualizado = last.FechaRegistro.ToString("yyyy-MM-dd hh:mm tt");
+                    panelCarga.Cargas = registroCargas;
+                }
+            }
 
             return View(panelCarga);
         }
@@ -86,7 +88,7 @@ namespace TimeKeeper.Controllers
                 reader.Close();
 
 
-                List<Tiempo> timeRegisters = DatFileProces.GetDtoTiempos(content);
+                List<Tiempo> timeRegisters = DatFileProces.GetDTOTiempoText(content);
                 if (timeRegisters.Count <= 0)
                 {
                     transaction.Rollback();
@@ -154,7 +156,7 @@ namespace TimeKeeper.Controllers
 
                 if (registroCargas.Any())
                 {
-                    RegistroCarga last = registroCargas.Last();
+                    RegistroCarga last = registroCargas.First();
 
                     panelCarga.Usuario = last.NombreUsuario;
                     panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
@@ -167,9 +169,65 @@ namespace TimeKeeper.Controllers
             return View(panelCarga);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UploadDataFileBocaChica(IFormFile file)
+        {
+            using var transaction = context.Database.BeginTransaction();
+            try
+            {
+
+                if (file is null || file.Length == 0)
+                    return RedirectToAction(nameof(PanelCargaBocaChica), new { msj = "invalidFormat" });
+
+                if (!file.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                    return RedirectToAction(nameof(PanelCargaBocaChica), new { msj = "invalidFormat" });
+
+                Stream stream = file.OpenReadStream();
+                StreamReader reader = new(stream);
+
+                string content = await reader.ReadToEndAsync();
+                List<Tiempo> timeRegisters = DatFileProces.GetDTOTiempoCsv(content);
+
+                if (timeRegisters.Count <= 0)
+                {
+                    transaction.Rollback();
+                    return RedirectToAction(nameof(PanelCargaBocaChica), new { msj = "notTimeRegister" });
+                }
 
 
+                int totalReg = timeRegisters.Count;
+                int added = 0;
+                foreach (var item in timeRegisters)
+                {
+                    if (!await context.Tiempos.AnyAsync(dbT => dbT.IdEmpleado == item.IdEmpleado && dbT.DateReg == item.DateReg && dbT.TimeReg == item.TimeReg))
+                    {
+                        context.Tiempos.Add(item);
+                        added++;
+                    }
+                }
 
+                RegistroCarga reg = new()
+                {
+                    NombreUsuario = User.Identity.Name,
+                    FechaRegistro = timeRegisters.Last().DateReg,
+                    FechaAplicado = DateTime.Now,
+                    Comentario = $"{added} de {totalReg} Reg",
+                    IdCentro = BocaChica
+                };
+
+                context.RegistrosCargas.Add(reg);
+                await context.SaveChangesAsync();
+
+                transaction.Commit();
+                return RedirectToAction(nameof(PanelCargaBocaChica), new { msj = "success" });
+
+            }
+            catch
+            {
+                transaction.Rollback();
+                return RedirectToAction(nameof(PanelCargaBocaChica), new { msj = "error" });
+            }
+        }
         #endregion
 
 
@@ -196,7 +254,7 @@ namespace TimeKeeper.Controllers
 
                 if (registroCargas.Any())
                 {
-                    RegistroCarga last = registroCargas.Last();
+                    RegistroCarga last = registroCargas.First();
 
                     panelCarga.Usuario = last.NombreUsuario;
                     panelCarga.FechaAplicado = last.FechaAplicado.ToString("yyyy-MM-dd hh:mm tt");
@@ -209,14 +267,74 @@ namespace TimeKeeper.Controllers
             return View(panelCarga);
 
         }
+        [HttpPost]
+        public async Task<IActionResult> UploadDataFileLaRomana(IFormFile file)
+        {
+            using var transaction = context.Database.BeginTransaction();
+            try
+            {
+
+                if (file is null || file.Length == 0)
+                    return RedirectToAction(nameof(PanelCargaLaRomana), new { msj = "invalidFormat" });
+
+                if (!file.FileName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                    return RedirectToAction(nameof(PanelCargaLaRomana), new { msj = "invalidFormat" });
+
+                Stream stream = file.OpenReadStream();
+                StreamReader reader = new(stream);
+
+                string content = await reader.ReadToEndAsync();
+                List<Tiempo> timeRegisters = DatFileProces.GetDTOTiempoCsv(content);
+
+                if (timeRegisters.Count <= 0)
+                {
+                    transaction.Rollback();
+                    return RedirectToAction(nameof(PanelCargaLaRomana), new { msj = "notTimeRegister" });
+                }
+
+
+                int totalReg = timeRegisters.Count;
+                int added = 0;
+                foreach (var item in timeRegisters)
+                {
+                    if (!await context.Tiempos.AnyAsync(dbT => dbT.IdEmpleado == item.IdEmpleado && dbT.DateReg == item.DateReg && dbT.TimeReg == item.TimeReg))
+                    {
+                        context.Tiempos.Add(item);
+                        added++;
+                    }
+                }
+
+                RegistroCarga reg = new()
+                {
+                    NombreUsuario = User.Identity.Name,
+                    FechaRegistro = timeRegisters.Last().DateReg,
+                    FechaAplicado = DateTime.Now,
+                    Comentario = $"{added} de {totalReg} Reg",
+                    IdCentro = LaRomana
+                };
+
+                context.RegistrosCargas.Add(reg);
+                await context.SaveChangesAsync();
+
+                transaction.Commit();
+                return RedirectToAction(nameof(PanelCargaLaRomana), new { msj = "success" });
+
+            }
+            catch
+            {
+                transaction.Rollback();
+                return RedirectToAction(nameof(PanelCargaLaRomana), new { msj = "error" });
+            }
+        }
 
 
 
 
         #endregion
 
+        #region FUNCTION
 
-
+        #endregion
 
     }
 }
